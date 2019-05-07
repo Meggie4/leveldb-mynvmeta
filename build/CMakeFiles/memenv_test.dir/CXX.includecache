@@ -239,6 +239,8 @@ leveldb/options.h
 ../include/leveldb/leveldb/options.h
 leveldb/status.h
 ../include/leveldb/leveldb/status.h
+set
+-
 
 /home/meggie/文档/leveldb-mynvmeta/helpers/memenv/memenv_test.cc
 helpers/memenv/memenv.h

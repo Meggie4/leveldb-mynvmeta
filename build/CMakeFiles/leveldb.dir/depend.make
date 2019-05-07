@@ -507,6 +507,7 @@ CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../table/filter_block.h
 CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../table/format.h
 CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../util/coding.h
 CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../util/crc32c.h
+CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../util/debug.h
 CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../util/hash.h
 CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../include/leveldb/comparator.h
 CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../include/leveldb/env.h

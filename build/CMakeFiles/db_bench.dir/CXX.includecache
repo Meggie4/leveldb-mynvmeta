@@ -166,6 +166,18 @@ leveldb/export.h
 leveldb/slice.h
 ../include/leveldb/leveldb/slice.h
 
+../include/leveldb/table_builder.h
+stdint.h
+-
+leveldb/export.h
+../include/leveldb/leveldb/export.h
+leveldb/options.h
+../include/leveldb/leveldb/options.h
+leveldb/status.h
+../include/leveldb/leveldb/status.h
+set
+-
+
 ../include/leveldb/write_batch.h
 string
 -
@@ -183,6 +195,8 @@ stdlib.h
 -
 fstream
 -
+leveldb/table_builder.h
+/home/meggie/文档/leveldb-mynvmeta/db/leveldb/table_builder.h
 leveldb/cache.h
 /home/meggie/文档/leveldb-mynvmeta/db/leveldb/cache.h
 leveldb/db.h

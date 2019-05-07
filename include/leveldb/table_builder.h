@@ -18,6 +18,12 @@
 #include "leveldb/options.h"
 #include "leveldb/status.h"
 
+////////////meggie
+#include <set>
+extern std::set<size_t> filter_lens;
+extern std::set<size_t> index_lens;
+////////////meggie
+
 namespace leveldb {
 
 class BlockBuilder;
@@ -80,8 +86,13 @@ class LEVELDB_EXPORT TableBuilder {
 
  private:
   bool ok() const { return status().ok(); }
-  void WriteBlock(BlockBuilder* block, BlockHandle* handle);
-  void WriteRawBlock(const Slice& data, CompressionType, BlockHandle* handle);
+  //////////////meggie
+  //void WriteBlock(BlockBuilder* block, BlockHandle* handle);
+  //void WriteRawBlock(const Slice& data, CompressionType, BlockHandle* handle);
+  size_t WriteBlock(BlockBuilder* block, BlockHandle* handle);
+  size_t WriteRawBlock(const Slice& data, CompressionType, BlockHandle* handle);
+  size_t meta_bytes;
+  //////////////meggie
 
   struct Rep;
   Rep* rep_;

@@ -7,6 +7,7 @@
 #include <stdlib.h>
 //////////meggie
 #include <fstream>
+#include "leveldb/table_builder.h"
 //////////meggie
 #include "leveldb/cache.h"
 #include "leveldb/db.h"
@@ -103,7 +104,10 @@ static int FLAGS_open_files = 0;
 
 // Bloom filter bits per key.
 // Negative means use default settings.
-static int FLAGS_bloom_bits = -1;
+
+////////////meggie
+static int FLAGS_bloom_bits = 10;
+////////////meggie
 
 // If true, do not destroy the existing database.  If you set this
 // flag and also specify a benchmark that wants a fresh database, that
@@ -672,6 +676,14 @@ class Benchmark {
 
       if (method != nullptr) {
         RunBenchmark(num_threads, name, method);
+        fprintf(stderr, "filter_lens:\n");
+        for(auto iter = filter_lens.begin(); iter != filter_lens.end(); iter++)
+            fprintf(stderr, " %zu", *iter);
+        fprintf(stderr, "\n");
+        fprintf(stderr, "index_lens:\n");
+        for(auto iter = index_lens.begin(); iter != index_lens.end(); iter++)
+            fprintf(stderr, " %zu", *iter);
+        fprintf(stderr, "\n");
       }
     }
   }

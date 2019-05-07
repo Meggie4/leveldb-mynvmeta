@@ -19,6 +19,7 @@ CMakeFiles/db_bench.dir/db/db_bench.cc.o: ../include/leveldb/iterator.h
 CMakeFiles/db_bench.dir/db/db_bench.cc.o: ../include/leveldb/options.h
 CMakeFiles/db_bench.dir/db/db_bench.cc.o: ../include/leveldb/slice.h
 CMakeFiles/db_bench.dir/db/db_bench.cc.o: ../include/leveldb/status.h
+CMakeFiles/db_bench.dir/db/db_bench.cc.o: ../include/leveldb/table_builder.h
 CMakeFiles/db_bench.dir/db/db_bench.cc.o: ../include/leveldb/write_batch.h
 CMakeFiles/db_bench.dir/db/db_bench.cc.o: ../db/db_bench.cc
 CMakeFiles/db_bench.dir/db/db_bench.cc.o: include/port/port_config.h

@@ -14,7 +14,12 @@
 #include "table/format.h"
 #include "util/coding.h"
 #include "util/crc32c.h"
+///////////////meggie
+#include "util/debug.h"
 
+std::set<size_t> filter_lens;
+std::set<size_t> index_lens;
+///////////////meggie
 namespace leveldb {
 
 struct TableBuilder::Rep {
@@ -29,6 +34,7 @@ struct TableBuilder::Rep {
   int64_t num_entries;
   bool closed;          // Either Finish() or Abandon() has been called.
   FilterBlockBuilder* filter_block;
+
 
   // We do not emit the index entry for a block until we have seen the
   // first key for the next data block.  This allows us to use shorter
@@ -61,7 +67,10 @@ struct TableBuilder::Rep {
 };
 
 TableBuilder::TableBuilder(const Options& options, WritableFile* file)
-    : rep_(new Rep(options, file)) {
+    : rep_(new Rep(options, file)),
+    /////////////meggie
+    meta_bytes(0) {
+    /////////////meggie
   if (rep_->filter_block != nullptr) {
     rep_->filter_block->StartBlock(0);
   }
@@ -136,7 +145,7 @@ void TableBuilder::Flush() {
   }
 }
 
-void TableBuilder::WriteBlock(BlockBuilder* block, BlockHandle* handle) {
+size_t TableBuilder::WriteBlock(BlockBuilder* block, BlockHandle* handle) {
   // File format contains a sequence of blocks where each block has:
   //    block_data: uint8[n]
   //    type: uint8
@@ -170,9 +179,12 @@ void TableBuilder::WriteBlock(BlockBuilder* block, BlockHandle* handle) {
   WriteRawBlock(block_contents, type, handle);
   r->compressed_output.clear();
   block->Reset();
+  //////////meggie
+  return block_contents.size();
+  //////////meggie
 }
 
-void TableBuilder::WriteRawBlock(const Slice& block_contents,
+size_t TableBuilder::WriteRawBlock(const Slice& block_contents,
                                  CompressionType type,
                                  BlockHandle* handle) {
   Rep* r = rep_;
@@ -190,6 +202,9 @@ void TableBuilder::WriteRawBlock(const Slice& block_contents,
       r->offset += block_contents.size() + kBlockTrailerSize;
     }
   }
+  //////////meggie
+  return block_contents.size();
+  //////////meggie
 }
 
 Status TableBuilder::status() const {
@@ -206,8 +221,13 @@ Status TableBuilder::Finish() {
 
   // Write filter block
   if (ok() && r->filter_block != nullptr) {
-    WriteRawBlock(r->filter_block->Finish(), kNoCompression,
+    ////////////meggie
+    size_t filter_len = WriteRawBlock(r->filter_block->Finish(), kNoCompression,
                   &filter_block_handle);
+    DEBUG_T("filter_block len:%zu\n", filter_len);
+    meta_bytes += filter_len;
+    filter_lens.insert(filter_len);
+    ////////////meggie
   }
 
   // Write metaindex block
@@ -223,7 +243,11 @@ Status TableBuilder::Finish() {
     }
 
     // TODO(postrelease): Add stats and other meta blocks
-    WriteBlock(&meta_index_block, &metaindex_block_handle);
+    //////meggie
+    size_t metaindex_len = WriteBlock(&meta_index_block, &metaindex_block_handle);
+    DEBUG_T("metaindex_block len:%zu\n", metaindex_len);
+    meta_bytes += metaindex_len;
+    //////meggie
   }
 
   // Write index block
@@ -235,7 +259,12 @@ Status TableBuilder::Finish() {
       r->index_block.Add(r->last_key, Slice(handle_encoding));
       r->pending_index_entry = false;
     }
-    WriteBlock(&r->index_block, &index_block_handle);
+    //////meggie
+    size_t index_len = WriteBlock(&r->index_block, &index_block_handle);
+    DEBUG_T("index_block len:%zu\n", index_len);
+    meta_bytes += index_len;
+    index_lens.insert(index_len);
+    //////meggie
   }
 
   // Write footer
@@ -246,10 +275,18 @@ Status TableBuilder::Finish() {
     std::string footer_encoding;
     footer.EncodeTo(&footer_encoding);
     r->status = r->file->Append(footer_encoding);
+    //////meggie
+    size_t footer_len = footer_encoding.size();
+    DEBUG_T("footer len:%zu\n", footer_len);
+    meta_bytes += footer_len;
+    //////meggie
     if (r->status.ok()) {
       r->offset += footer_encoding.size();
     }
   }
+  
+  DEBUG_T("finaly, sstable meta len:%zu\n", meta_bytes);
+  
   return r->status;
 }
 
