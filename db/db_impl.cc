@@ -1572,10 +1572,10 @@ Status DB::Open(const Options& options, const std::string& dbname,
   ////////////meggie
   if(s.ok() && impl->meta_ == nullptr) {
       uint64_t meta_number = 1;
-      size_t meta_size = (2 << 30);
+      uint64_t meta_size = (2 * 1024UL * 1024UL * 1024UL);
       std::string meta_name = MetaFileName(dbname_nvm, meta_number);
-      DEBUG_T("to create META\n");
-      //impl->meta = new META(meta_name, meta_size, false);
+      DEBUG_T("to create META,meta_size:%llu\n", meta_size);
+      impl->meta_ = new META(meta_name, meta_size, false);
   }
   ////////////meggie
 
@@ -1640,7 +1640,8 @@ Status DestroyDB(const std::string& dbname, const Options& options,
         return Status::OK();
   }
   for (size_t i = 0; i < filenames_nvm.size(); i++) {
-        Status del = env->DeleteFile(dbname_nvm + "/" + filenames[i]);
+        Status del = env->DeleteFile(dbname_nvm + "/" + filenames_nvm[i]);
+        DEBUG_T("delete nvm file %s\n", filenames_nvm[i].c_str());
         if (result.ok() && !del.ok()) {
           result = del;
         }

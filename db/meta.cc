@@ -3,6 +3,7 @@
 
 #include "db/meta.h"
 #include "port/cache_flush.h"
+#include "util/debug.h"
 
 struct bplus_tree_config{
     int order;
@@ -16,9 +17,9 @@ namespace leveldb{
       size_(0) {
     }
    
-    void META_Chunk::append(const void* ptr, size_t size) {
+    void META_Chunk::append(const void* ptr, uint64_t size) {
         if(size_ + size > CHUNK_SIZE) {
-            fprintf(stderr, "meta.cc append, overflow exit, name=%06llu.ldb, chunk->size_:%lld, size:%zu\n",
+            fprintf(stderr, "meta.cc append, overflow exit, name=%06llu.ldb, chunk->size_:%llu, size:%llu\n",
                     static_cast<unsigned long long>(number_), size_, size);
             exit(9);
         }
@@ -32,7 +33,7 @@ namespace leveldb{
        flush_cache(addr_, size_); 
     }
 
-    META::META(const std::string& nvm_file, size_t file_size, bool recovery) 
+    META::META(const std::string& nvm_file, uint64_t file_size, bool recovery) 
         : chunk_amount_(0),
           remaining_amount_(0),
           size_(file_size),
@@ -42,6 +43,7 @@ namespace leveldb{
           OnlineMap_(nullptr),
           index_tree_(nullptr) {
         /////mmap open fd;
+        DEBUG_T("-----------------META SETUP---------------\n");
         fd_ = open(nvm_file.c_str(), O_RDWR);
         
         if(fd_ == -1) {
@@ -55,6 +57,7 @@ namespace leveldb{
         
         if(ftruncate(fd_, size_) != 0) {
             perror("ftruncate failed\n");
+            DEBUG_T("size_:%llu\n", size_);
             exit(9);
         }
        
@@ -68,7 +71,7 @@ namespace leveldb{
             perror("index bplus tree create failed\n");
             exit(9);
         }
-
+        DEBUG_T("success to setup bplustree\n");
         ///mmap
         mmap_start_ = (char*) mmap(nullptr, size_, PROT_READ|PROT_WRITE,
                 MAP_SHARED, fd_, 0);
@@ -88,6 +91,8 @@ namespace leveldb{
             chunk_amount_ = (size_ - (8 + 8 + estimate_chunk_amount)) % CHUNK_SIZE;
             
             remaining_amount_ = chunk_amount_;
+            DEBUG_T("chunk_amount:%lld, remaining_amount:%lld\n", 
+                    chunk_amount_, remaining_amount_);
             //reserved space 
             //8(chunk_amount) + 8(remaining_amount) + chunk_amount_(OnlineMap_)
             *current_ptr = chunk_amount_;
@@ -98,6 +103,7 @@ namespace leveldb{
             memset(OnlineMap_, 0, chunk_amount_);
             chunk_offset_ = chunk_amount_ + 16;
         }
+        DEBUG_T("------------END META SETUP-----------\n");
     }
 
     META::~META() {
@@ -156,7 +162,6 @@ namespace leveldb{
             return false;
         }
 
-        
         for(tmp = result; tmp < chunk_amount_; tmp++) {
             if(OnlineMap_[tmp] == 0) {
                 OnlineMap_[tmp] = 1;
@@ -164,6 +169,9 @@ namespace leveldb{
                 char* phy_addr = mmap_start_ + chunk_offset_ + tmp * CHUNK_SIZE; 
                 *mchunk = new META_Chunk(number, phy_addr);
                 update_chunk_index(number, tmp);
+                uint64_t tree_index = get_chunk_index(number);
+                DEBUG_T("success to get META_Chunk, number:%llu, tmp:%llu, tree_index:%llu\n", number, tmp, tree_index);
+
                 return true;
             }
         }

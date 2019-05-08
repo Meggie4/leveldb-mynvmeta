@@ -36,13 +36,13 @@ namespace leveldb {
         
         public:
             META_Chunk(uint64_t number, char* addr);
-            void append(const void* ptr, size_t size); 
+            void append(const void* ptr, uint64_t size); 
             void flush();
     };
 
     class META {
         public:
-            META(const std::string& nvm_file, size_t size, bool recovery = false);
+            META(const std::string& nvm_file, uint64_t size, bool recovery = false);
             ~META();
             bool reserve_chunk(uint64_t number);
             META_Chunk* alloc_chunk(uint64_t number);

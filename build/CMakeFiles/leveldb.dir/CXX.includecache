@@ -763,6 +763,8 @@ db/meta.h
 /home/meggie/文档/leveldb-mynvmeta/db/db/meta.h
 port/cache_flush.h
 /home/meggie/文档/leveldb-mynvmeta/db/port/cache_flush.h
+util/debug.h
+/home/meggie/文档/leveldb-mynvmeta/db/util/debug.h
 
 /home/meggie/文档/leveldb-mynvmeta/db/repair.cc
 db/builder.h

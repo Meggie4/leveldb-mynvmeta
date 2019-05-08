@@ -1,41 +1,63 @@
-nvm GetChildren failed
-to create META
-to create META
+delete nvm file 000001.met
+delete nvm file ..
+delete nvm file .
+to create META,meta_size:2147483648
+-----------------META SETUP---------------
+success to setup bplustree
+chunk_amount:61424, remaining_amount:61424
+------------END META SETUP-----------
+delete nvm file 000001.met
+delete nvm file ..
+delete nvm file .
+to create META,meta_size:2147483648
+-----------------META SETUP---------------
+success to setup bplustree
+chunk_amount:61424, remaining_amount:61424
+------------END META SETUP-----------
+success to get META_Chunk, number:5, tmp:5, tree_index:5
 filter_block len:42403
 metaindex_block len:57
 index_block len:28196
 footer len:48
 finaly, sstable meta len:70704
+success to get META_Chunk, number:7, tmp:7, tree_index:7
 filter_block len:42407
 metaindex_block len:57
 index_block len:28180
 footer len:48
 finaly, sstable meta len:70692
+success to get META_Chunk, number:9, tmp:9, tree_index:9
 filter_block len:42403
 metaindex_block len:57
 index_block len:28186
 footer len:48
 finaly, sstable meta len:70694
+success to get META_Chunk, number:11, tmp:11, tree_index:11
 filter_block len:42403
 metaindex_block len:57
 index_block len:28196
 footer len:48
 finaly, sstable meta len:70704
+success to get META_Chunk, number:13, tmp:13, tree_index:13
 filter_block len:42403
 metaindex_block len:57
 index_block len:28224
 footer len:48
 finaly, sstable meta len:70732
+success to get META_Chunk, number:15, tmp:15, tree_index:15
 filter_block len:42407
 metaindex_block len:57
 index_block len:28188
 footer len:48
 finaly, sstable meta len:70700
+success to get META_Chunk, number:16, tmp:16, tree_index:16
 filter_block len:55080
 metaindex_block len:57
 index_block len:37061
 footer len:48
 finaly, sstable meta len:92246
+success to get META_Chunk, number:17, tmp:17, tree_index:17
+success to get META_Chunk, number:19, tmp:19, tree_index:19
 filter_block len:42407
 metaindex_block len:57
 index_block len:28200
@@ -46,6 +68,8 @@ metaindex_block len:57
 index_block len:37069
 footer len:48
 finaly, sstable meta len:92254
+success to get META_Chunk, number:20, tmp:20, tree_index:20
+success to get META_Chunk, number:22, tmp:22, tree_index:22
 filter_block len:42403
 metaindex_block len:57
 index_block len:28167
@@ -56,11 +80,14 @@ metaindex_block len:57
 index_block len:37070
 footer len:48
 finaly, sstable meta len:92255
+success to get META_Chunk, number:23, tmp:23, tree_index:23
 filter_block len:32536
 metaindex_block len:57
 index_block len:21690
 footer len:48
 finaly, sstable meta len:54331
+success to get META_Chunk, number:24, tmp:24, tree_index:24
+success to get META_Chunk, number:26, tmp:26, tree_index:26
 filter_block len:42403
 metaindex_block len:57
 index_block len:28210
@@ -71,11 +98,14 @@ metaindex_block len:57
 index_block len:37116
 footer len:48
 finaly, sstable meta len:92297
+success to get META_Chunk, number:27, tmp:27, tree_index:27
 filter_block len:55076
 metaindex_block len:57
 index_block len:37107
 footer len:48
 finaly, sstable meta len:92288
+success to get META_Chunk, number:28, tmp:28, tree_index:28
+success to get META_Chunk, number:30, tmp:30, tree_index:30
 filter_block len:42403
 metaindex_block len:57
 index_block len:28187
@@ -86,26 +116,32 @@ metaindex_block len:57
 index_block len:37108
 footer len:48
 finaly, sstable meta len:92289
+success to get META_Chunk, number:31, tmp:31, tree_index:31
 filter_block len:55076
 metaindex_block len:57
 index_block len:37101
 footer len:48
 finaly, sstable meta len:92282
+success to get META_Chunk, number:33, tmp:33, tree_index:33
 filter_block len:42403
 metaindex_block len:57
 index_block len:28205
 footer len:48
 finaly, sstable meta len:70713
+success to get META_Chunk, number:34, tmp:34, tree_index:34
 filter_block len:13639
 metaindex_block len:55
 index_block len:9074
 footer len:48
 finaly, sstable meta len:22816
+success to get META_Chunk, number:35, tmp:35, tree_index:35
 filter_block len:55080
 metaindex_block len:57
 index_block len:37083
 footer len:48
 finaly, sstable meta len:92268
+success to get META_Chunk, number:36, tmp:36, tree_index:36
+success to get META_Chunk, number:38, tmp:38, tree_index:38
 filter_block len:42403
 metaindex_block len:57
 index_block len:28187
@@ -116,41 +152,44 @@ metaindex_block len:57
 index_block len:37081
 footer len:48
 finaly, sstable meta len:92266
-filter_block len:55080
-metaindex_block len:57
-index_block len:37092
-footer len:48
-finaly, sstable meta len:92277
+success to get META_Chunk, number:39, tmp:39, tree_index:39
+success to get META_Chunk, number:41, tmp:41, tree_index:41
 filter_block len:42407
 metaindex_block len:57
 index_block len:28189
 footer len:48
 finaly, sstable meta len:70701
+filter_block len:55080
+metaindex_block len:57
+index_block len:37092
+footer len:48
+finaly, sstable meta len:92277
+success to get META_Chunk, number:42, tmp:42, tree_index:42
 filter_block len:32285
 metaindex_block len:57
 index_block len:21529
 footer len:48
 finaly, sstable meta len:53919
-filter_block len:55126
-metaindex_block len:57
-index_block len:37170
-footer len:48
-finaly, sstable meta len:92401
+success to get META_Chunk, number:43, tmp:43, tree_index:43
+success to get META_Chunk, number:45, tmp:45, tree_index:45
 filter_block len:42407
 metaindex_block len:57
 index_block len:28190
 footer len:48
 finaly, sstable meta len:70702
+filter_block len:55126
+metaindex_block len:57
+index_block len:37170
+footer len:48
+finaly, sstable meta len:92401
+success to get META_Chunk, number:46, tmp:46, tree_index:46
 filter_block len:40776
 metaindex_block len:57
 index_block len:27402
 footer len:48
 finaly, sstable meta len:68283
-filter_block len:55172
-metaindex_block len:57
-index_block len:37245
-footer len:48
-finaly, sstable meta len:92522
+success to get META_Chunk, number:47, tmp:47, tree_index:47
+success to get META_Chunk, number:49, tmp:49, tree_index:49
 filter_block len:42403
 metaindex_block len:57
 index_block len:28202
@@ -158,74 +197,95 @@ footer len:48
 finaly, sstable meta len:70710
 filter_block len:55172
 metaindex_block len:57
+index_block len:37245
+footer len:48
+finaly, sstable meta len:92522
+success to get META_Chunk, number:50, tmp:50, tree_index:50
+filter_block len:55172
+metaindex_block len:57
 index_block len:37240
 footer len:48
 finaly, sstable meta len:92517
+success to get META_Chunk, number:52, tmp:52, tree_index:52
 filter_block len:42403
 metaindex_block len:57
 index_block len:28203
 footer len:48
 finaly, sstable meta len:70711
+success to get META_Chunk, number:53, tmp:53, tree_index:53
 filter_block len:46239
 metaindex_block len:57
 index_block len:31082
 footer len:48
 finaly, sstable meta len:77426
-filter_block len:55080
-metaindex_block len:57
-index_block len:37086
-footer len:48
-finaly, sstable meta len:92271
+success to get META_Chunk, number:54, tmp:54, tree_index:54
+success to get META_Chunk, number:56, tmp:56, tree_index:56
 filter_block len:42403
 metaindex_block len:57
 index_block len:28182
 footer len:48
 finaly, sstable meta len:70690
+filter_block len:55080
+metaindex_block len:57
+index_block len:37086
+footer len:48
+finaly, sstable meta len:92271
+success to get META_Chunk, number:57, tmp:57, tree_index:57
 filter_block len:55122
 metaindex_block len:57
 index_block len:37195
 footer len:48
 finaly, sstable meta len:92422
+success to get META_Chunk, number:59, tmp:59, tree_index:59
 filter_block len:42403
 metaindex_block len:57
 index_block len:28203
 footer len:48
 finaly, sstable meta len:70711
+success to get META_Chunk, number:60, tmp:60, tree_index:60
 filter_block len:55122
 metaindex_block len:57
 index_block len:37194
 footer len:48
 finaly, sstable meta len:92421
-filter_block len:55172
-metaindex_block len:57
-index_block len:37235
-footer len:48
-finaly, sstable meta len:92512
+success to get META_Chunk, number:61, tmp:61, tree_index:61
+success to get META_Chunk, number:63, tmp:63, tree_index:63
 filter_block len:42403
 metaindex_block len:57
 index_block len:28201
 footer len:48
 finaly, sstable meta len:70709
+filter_block len:55172
+metaindex_block len:57
+index_block len:37235
+footer len:48
+finaly, sstable meta len:92512
+success to get META_Chunk, number:64, tmp:64, tree_index:64
 filter_block len:55126
 metaindex_block len:57
 index_block len:37187
 footer len:48
 finaly, sstable meta len:92418
+success to get META_Chunk, number:65, tmp:65, tree_index:65
 filter_block len:17458
 metaindex_block len:56
 index_block len:11586
 footer len:48
 finaly, sstable meta len:29148
+success to get META_Chunk, number:66, tmp:66, tree_index:66
 filter_block len:55168
 metaindex_block len:57
 index_block len:37252
 footer len:48
 finaly, sstable meta len:92525
+success to get META_Chunk, number:67, tmp:67, tree_index:67
 filter_block len:37412
 metaindex_block len:57
 index_block len:25107
 footer len:48
 finaly, sstable meta len:62624
+success to get META_Chunk, number:68, tmp:68, tree_index:68
+success to get META_Chunk, number:70, tmp:70, tree_index:70
 filter_block len:42403
 metaindex_block len:57
 index_block len:28200
@@ -236,26 +296,26 @@ metaindex_block len:57
 index_block len:37291
 footer len:48
 finaly, sstable meta len:92614
-filter_block len:55168
-metaindex_block len:57
-index_block len:37254
-footer len:48
-finaly, sstable meta len:92527
+success to get META_Chunk, number:71, tmp:71, tree_index:71
+success to get META_Chunk, number:73, tmp:73, tree_index:73
 filter_block len:42407
 metaindex_block len:57
 index_block len:28201
 footer len:48
 finaly, sstable meta len:70713
+filter_block len:55168
+metaindex_block len:57
+index_block len:37254
+footer len:48
+finaly, sstable meta len:92527
+success to get META_Chunk, number:74, tmp:74, tree_index:74
 filter_block len:28621
 metaindex_block len:57
 index_block len:19042
 footer len:48
 finaly, sstable meta len:47768
-filter_block len:55218
-metaindex_block len:57
-index_block len:37291
-footer len:48
-finaly, sstable meta len:92614
+success to get META_Chunk, number:75, tmp:75, tree_index:75
+success to get META_Chunk, number:77, tmp:77, tree_index:77
 filter_block len:42403
 metaindex_block len:57
 index_block len:28189
@@ -263,29 +323,35 @@ footer len:48
 finaly, sstable meta len:70697
 filter_block len:55218
 metaindex_block len:57
+index_block len:37291
+footer len:48
+finaly, sstable meta len:92614
+success to get META_Chunk, number:78, tmp:78, tree_index:78
+filter_block len:55218
+metaindex_block len:57
 index_block len:37289
 footer len:48
 finaly, sstable meta len:92612
-filter_block len:55122
-metaindex_block len:57
-index_block len:37181
-footer len:48
-finaly, sstable meta len:92408
+success to get META_Chunk, number:79, tmp:79, tree_index:79
+success to get META_Chunk, number:81, tmp:81, tree_index:81
 filter_block len:42403
 metaindex_block len:57
 index_block len:28233
 footer len:48
 finaly, sstable meta len:70741
+filter_block len:55122
+metaindex_block len:57
+index_block len:37181
+footer len:48
+finaly, sstable meta len:92408
+success to get META_Chunk, number:82, tmp:82, tree_index:82
 filter_block len:20012
 metaindex_block len:56
 index_block len:13336
 footer len:48
 finaly, sstable meta len:33452
-filter_block len:55172
-metaindex_block len:57
-index_block len:37246
-footer len:48
-finaly, sstable meta len:92523
+success to get META_Chunk, number:83, tmp:83, tree_index:83
+success to get META_Chunk, number:85, tmp:85, tree_index:85
 filter_block len:42403
 metaindex_block len:57
 index_block len:28203
@@ -293,39 +359,53 @@ footer len:48
 finaly, sstable meta len:70711
 filter_block len:55172
 metaindex_block len:57
+index_block len:37246
+footer len:48
+finaly, sstable meta len:92523
+success to get META_Chunk, number:86, tmp:86, tree_index:86
+filter_block len:55172
+metaindex_block len:57
 index_block len:37251
 footer len:48
 finaly, sstable meta len:92528
+success to get META_Chunk, number:87, tmp:87, tree_index:87
 filter_block len:55126
 metaindex_block len:57
 index_block len:37175
 footer len:48
 finaly, sstable meta len:92406
+success to get META_Chunk, number:88, tmp:88, tree_index:88
 filter_block len:55126
 metaindex_block len:57
 index_block len:37161
 footer len:48
 finaly, sstable meta len:92392
+success to get META_Chunk, number:89, tmp:89, tree_index:89
 filter_block len:55172
 metaindex_block len:57
 index_block len:37237
 footer len:48
 finaly, sstable meta len:92514
+success to get META_Chunk, number:90, tmp:90, tree_index:90
 filter_block len:55168
 metaindex_block len:57
 index_block len:37251
 footer len:48
 finaly, sstable meta len:92524
+success to get META_Chunk, number:91, tmp:91, tree_index:91
 filter_block len:42757
 metaindex_block len:57
 index_block len:28775
 footer len:48
 finaly, sstable meta len:71637
+success to get META_Chunk, number:92, tmp:92, tree_index:92
 filter_block len:55218
 metaindex_block len:57
 index_block len:37290
 footer len:48
 finaly, sstable meta len:92613
+success to get META_Chunk, number:93, tmp:93, tree_index:93
+success to get META_Chunk, number:95, tmp:95, tree_index:95
 filter_block len:42407
 metaindex_block len:57
 index_block len:28196
@@ -336,11 +416,14 @@ metaindex_block len:57
 index_block len:37292
 footer len:48
 finaly, sstable meta len:92611
+success to get META_Chunk, number:96, tmp:96, tree_index:96
 filter_block len:42040
 metaindex_block len:57
 index_block len:28244
 footer len:48
 finaly, sstable meta len:70389
+success to get META_Chunk, number:97, tmp:97, tree_index:97
+success to get META_Chunk, number:99, tmp:99, tree_index:99
 filter_block len:42403
 metaindex_block len:57
 index_block len:28191
@@ -351,11 +434,14 @@ metaindex_block len:57
 index_block len:37292
 footer len:48
 finaly, sstable meta len:92611
+success to get META_Chunk, number:100, tmp:100, tree_index:100
 filter_block len:55214
 metaindex_block len:57
 index_block len:37292
 footer len:48
 finaly, sstable meta len:92611
+success to get META_Chunk, number:101, tmp:101, tree_index:101
+success to get META_Chunk, number:103, tmp:103, tree_index:103
 filter_block len:42407
 metaindex_block len:57
 index_block len:28194
@@ -366,41 +452,50 @@ metaindex_block len:57
 index_block len:37292
 footer len:48
 finaly, sstable meta len:92611
+success to get META_Chunk, number:104, tmp:104, tree_index:104
 filter_block len:11907
 metaindex_block len:55
 index_block len:7945
 footer len:48
 finaly, sstable meta len:19955
-filter_block len:42403
-metaindex_block len:57
-index_block len:28195
-footer len:48
-finaly, sstable meta len:70703
+success to get META_Chunk, number:105, tmp:105, tree_index:105
 filter_block len:55214
 metaindex_block len:57
 index_block len:37292
 footer len:48
 finaly, sstable meta len:92611
+success to get META_Chunk, number:106, tmp:106, tree_index:106
+success to get META_Chunk, number:108, tmp:108, tree_index:108
+filter_block len:42403
+metaindex_block len:57
+index_block len:28195
+footer len:48
+finaly, sstable meta len:70703
 filter_block len:40462
 metaindex_block len:57
 index_block len:27190
 footer len:48
 finaly, sstable meta len:67757
-filter_block len:42403
-metaindex_block len:57
-index_block len:28197
-footer len:48
-finaly, sstable meta len:70705
+success to get META_Chunk, number:109, tmp:109, tree_index:109
 filter_block len:55122
 metaindex_block len:57
 index_block len:37153
 footer len:48
 finaly, sstable meta len:92380
+success to get META_Chunk, number:111, tmp:111, tree_index:111
+filter_block len:42403
+metaindex_block len:57
+index_block len:28197
+footer len:48
+finaly, sstable meta len:70705
+success to get META_Chunk, number:112, tmp:112, tree_index:112
 filter_block len:55218
 metaindex_block len:57
 index_block len:37289
 footer len:48
 finaly, sstable meta len:92612
+success to get META_Chunk, number:113, tmp:113, tree_index:113
+success to get META_Chunk, number:115, tmp:115, tree_index:115
 filter_block len:42403
 metaindex_block len:57
 index_block len:28197
@@ -411,6 +506,8 @@ metaindex_block len:57
 index_block len:37248
 footer len:48
 finaly, sstable meta len:92525
+success to get META_Chunk, number:116, tmp:116, tree_index:116
+success to get META_Chunk, number:118, tmp:118, tree_index:118
 filter_block len:42403
 metaindex_block len:57
 index_block len:28205
@@ -421,31 +518,38 @@ metaindex_block len:57
 index_block len:37244
 footer len:48
 finaly, sstable meta len:92521
+success to get META_Chunk, number:119, tmp:119, tree_index:119
 filter_block len:55172
 metaindex_block len:57
 index_block len:37233
 footer len:48
 finaly, sstable meta len:92510
+success to get META_Chunk, number:120, tmp:120, tree_index:120
 filter_block len:55080
 metaindex_block len:57
 index_block len:37078
 footer len:48
 finaly, sstable meta len:92263
+success to get META_Chunk, number:121, tmp:121, tree_index:121
 filter_block len:7239
 metaindex_block len:55
 index_block len:4803
 footer len:48
 finaly, sstable meta len:12145
+success to get META_Chunk, number:122, tmp:122, tree_index:122
 filter_block len:3209
 metaindex_block len:55
 index_block len:2148
 footer len:48
 finaly, sstable meta len:5460
+success to get META_Chunk, number:123, tmp:123, tree_index:123
 filter_block len:55214
 metaindex_block len:57
 index_block len:37292
 footer len:48
 finaly, sstable meta len:92611
+success to get META_Chunk, number:124, tmp:124, tree_index:124
+success to get META_Chunk, number:126, tmp:126, tree_index:126
 filter_block len:42403
 metaindex_block len:57
 index_block len:28200
@@ -456,16 +560,20 @@ metaindex_block len:57
 index_block len:37292
 footer len:48
 finaly, sstable meta len:92611
+success to get META_Chunk, number:127, tmp:127, tree_index:127
 filter_block len:55218
 metaindex_block len:57
 index_block len:37287
 footer len:48
 finaly, sstable meta len:92610
+success to get META_Chunk, number:128, tmp:128, tree_index:128
 filter_block len:20160
 metaindex_block len:56
 index_block len:13410
 footer len:48
 finaly, sstable meta len:33674
+success to get META_Chunk, number:129, tmp:129, tree_index:129
+success to get META_Chunk, number:131, tmp:131, tree_index:131
 filter_block len:42403
 metaindex_block len:57
 index_block len:28200
@@ -476,6 +584,8 @@ metaindex_block len:57
 index_block len:37292
 footer len:48
 finaly, sstable meta len:92611
+success to get META_Chunk, number:132, tmp:132, tree_index:132
+success to get META_Chunk, number:134, tmp:134, tree_index:134
 filter_block len:42403
 metaindex_block len:57
 index_block len:28207
@@ -486,16 +596,20 @@ metaindex_block len:57
 index_block len:37291
 footer len:48
 finaly, sstable meta len:92610
+success to get META_Chunk, number:135, tmp:135, tree_index:135
 filter_block len:55218
 metaindex_block len:57
 index_block len:37288
 footer len:48
 finaly, sstable meta len:92611
+success to get META_Chunk, number:136, tmp:136, tree_index:136
 filter_block len:5351
 metaindex_block len:55
 index_block len:3553
 footer len:48
 finaly, sstable meta len:9007
+success to get META_Chunk, number:137, tmp:137, tree_index:137
+success to get META_Chunk, number:139, tmp:139, tree_index:139
 filter_block len:42403
 metaindex_block len:57
 index_block len:28207
