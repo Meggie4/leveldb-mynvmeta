@@ -233,6 +233,7 @@ size_t TableBuilder::WriteMetaBlock(const Slice& block_contents,
     crc = crc32c::Extend(crc, trailer, 1);  // Extend crc to cover block type
     EncodeFixed32(trailer+1, crc32c::Mask(crc));
     chunk_offset_ = mchunk_->append(trailer, kBlockTrailerSize);
+    mchunk_->set_length(block_contents.size() + kBlockTrailerSize);
     //DEBUG_T("chunk_offset_:%llu\n", chunk_offset_);
     return block_contents.size() + kBlockTrailerSize;
 }
@@ -270,8 +271,8 @@ Status TableBuilder::Finish() {
     meta_bytes += filter_len;
     filter_lens.insert(filter_len);
     if(mchunk_) {
-       WriteMetaBlock(filter_block_contents, kNoCompression, 
-               &filter_block_handle); 
+       //WriteMetaBlock(filter_block_contents, kNoCompression, &filter_block_handle); 
+       WriteMetaBlock(filter_block_contents, kNoCompression, nullptr); 
     }
     ////////////meggie
   }
@@ -295,12 +296,6 @@ Status TableBuilder::Finish() {
     size_t metaindex_len = WriteRawBlock(metaindex_block_contents, kNoCompression,
                   &metaindex_block_handle);
     meta_index_block.Reset();
-    DEBUG_T("metaindex_block len:%zu\n", metaindex_len);
-    meta_bytes += metaindex_len;
-    if(mchunk_) {
-       //WriteMetaBlock(metaindex_block_contents, kNoCompression, &metaindex_block_handle); 
-       WriteMetaBlock(metaindex_block_contents, kNoCompression, nullptr); 
-    }
     //////meggie
   }
 
@@ -337,21 +332,12 @@ Status TableBuilder::Finish() {
     std::string footer_encoding;
     footer.EncodeTo(&footer_encoding);
     r->status = r->file->Append(footer_encoding);
-    //////meggie
-    size_t footer_len = footer_encoding.size();
-    DEBUG_T("footer len:%zu\n", footer_len);
-    meta_bytes += footer_len;
-    if(mchunk_) {
-       chunk_offset_ = mchunk_->append(footer_encoding.data(), footer_encoding.size());
-       DEBUG_T("after write footer, chunk_offset_:%llu\n", chunk_offset_);
-    }
-    //////meggie
     if (r->status.ok()) {
       r->offset += footer_encoding.size();
     }
   }
   
-  DEBUG_T("finaly, sstable meta len:%zu\n", meta_bytes);
+  DEBUG_T("finally, sstable meta len:%zu\n", meta_bytes);
   meta_lens.insert(meta_bytes);
   /////////meggie
   mchunk_->flush();

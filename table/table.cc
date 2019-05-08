@@ -83,6 +83,17 @@ Status Table::Open(const Options& options,
   return s;
 }
 
+///////////////meggie
+Status Table::OpenByMeta(const Options& Options,
+                        uint64_t file_number,
+                        uint64_t file_size,
+                        Table** table) {
+   Status s;
+   return s;
+}
+
+///////////////meggie
+
 void Table::ReadMeta(const Footer& footer) {
   if (rep_->options.filter_policy == nullptr) {
     return;  // Do not need any metadata

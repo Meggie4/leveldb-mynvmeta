@@ -41,6 +41,14 @@ class LEVELDB_EXPORT Table {
                      uint64_t file_size,
                      Table** table);
 
+
+  //////////////meggie
+  static Status OpenByMeta(const Options& Options,
+                        uint64_t file_number,
+                        uint64_t file_size,
+                        Table** table);
+  //////////////meggie
+
   Table(const Table&) = delete;
   void operator=(const Table&) = delete;
 

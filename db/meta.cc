@@ -4,6 +4,7 @@
 #include "db/meta.h"
 #include "port/cache_flush.h"
 #include "util/debug.h"
+#include "table/format.h"
 
 struct bplus_tree_config{
     int order;
@@ -14,28 +15,40 @@ namespace leveldb{
     META_Chunk::META_Chunk(uint64_t number, char* addr)
     : number_(number),
       addr_(addr),
+      length_ptr_(nullptr),
       size_(0) {
           current_ptr_ = addr_ + 8;
+          length_ptr_ = current_ptr_;
+          current_ptr_ = length_ptr_ + 8;
+          size_ = 16;
     }
    
     uint64_t META_Chunk::append(const void* ptr, uint64_t size) {
-        if(size_ + size > CHUNK_SIZE) {
+        if((size_ + size) > CHUNK_SIZE) {
             fprintf(stderr, "meta.cc append, overflow exit, name=%06llu.ldb, chunk->size_:%llu, size:%llu\n",
                     static_cast<unsigned long long>(number_), size_, size);
             exit(9);
         }
+        
         memcpy(current_ptr_, ptr, size);
         current_ptr_ += size;
-
         size_ += size;
-
+        
         return (current_ptr_ - addr_);
     }
 
+    void META_Chunk::set_length(uint64_t len) {
+        *length_ptr_ = len;
+        length_ptr_ = current_ptr_;
+        current_ptr_ = length_ptr_ + 8;
+        size_ += 8;
+    }
+
+    
     void META_Chunk::flush() {
-       DEBUG_T("flush, size_:%llu\n", size_);
-       *addr_ = size_;
-       flush_cache(addr_, (8 + size_)); 
+       DEBUG_T("flush, size_:%llu\n", size_ - 8);
+       *addr_ = kTableMagicNumber;
+       flush_cache(addr_, size_ - 8); 
     }
 
     META::META(const std::string& nvm_file, uint64_t file_size, bool recovery) 
@@ -52,7 +65,7 @@ namespace leveldb{
         fd_ = open(nvm_file.c_str(), O_RDWR);
         
         if(fd_ == -1) {
-            fprintf(stderr, "create nvm_file:%s\n", nvm_file.c_str());
+            DEBUG_T("create nvm_file:%s\n", nvm_file.c_str());
             fd_ = open(nvm_file.c_str(), O_RDWR | O_CREAT, 0664);
             if(fd_ < 0) {
                 fprintf(stderr, "create nvm_file failed\n");

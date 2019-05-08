@@ -241,7 +241,13 @@ CMakeFiles/leveldb.dir/db/meta.cc.o
  ..//bplustree/lib/bplustree.h
  ..//db/meta.h
  ..//port/cache_flush.h
+ ..//table/format.h
  ..//util/debug.h
+ ../include/leveldb/export.h
+ ../include/leveldb/options.h
+ ../include/leveldb/slice.h
+ ../include/leveldb/status.h
+ ../include/leveldb/table_builder.h
  /home/meggie/文档/leveldb-mynvmeta/db/meta.cc
 CMakeFiles/leveldb.dir/db/repair.cc.o
  ..//db/builder.h

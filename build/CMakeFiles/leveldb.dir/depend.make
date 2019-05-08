@@ -240,7 +240,13 @@ CMakeFiles/leveldb.dir/db/memtable.cc.o: include/port/port_config.h
 CMakeFiles/leveldb.dir/db/meta.cc.o: ../bplustree/lib/bplustree.h
 CMakeFiles/leveldb.dir/db/meta.cc.o: ../db/meta.h
 CMakeFiles/leveldb.dir/db/meta.cc.o: ../port/cache_flush.h
+CMakeFiles/leveldb.dir/db/meta.cc.o: ../table/format.h
 CMakeFiles/leveldb.dir/db/meta.cc.o: ../util/debug.h
+CMakeFiles/leveldb.dir/db/meta.cc.o: ../include/leveldb/export.h
+CMakeFiles/leveldb.dir/db/meta.cc.o: ../include/leveldb/options.h
+CMakeFiles/leveldb.dir/db/meta.cc.o: ../include/leveldb/slice.h
+CMakeFiles/leveldb.dir/db/meta.cc.o: ../include/leveldb/status.h
+CMakeFiles/leveldb.dir/db/meta.cc.o: ../include/leveldb/table_builder.h
 CMakeFiles/leveldb.dir/db/meta.cc.o: ../db/meta.cc
 
 CMakeFiles/leveldb.dir/db/repair.cc.o: ../db/builder.h
