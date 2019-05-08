@@ -23,7 +23,7 @@ extern "C" {
     #include "bplustree/lib/bplustree.h"
 }
 
-#define CHUNK_SIZE (60 * 1024)
+#define CHUNK_SIZE (100 * 1024)
 
 namespace leveldb {
 
@@ -33,10 +33,11 @@ namespace leveldb {
             char* addr_;
             uint64_t size_;
             uint64_t number_;
+            char* current_ptr_;
         
         public:
             META_Chunk(uint64_t number, char* addr);
-            void append(const void* ptr, uint64_t size); 
+            uint64_t append(const void* ptr, uint64_t size); 
             void flush();
     };
 

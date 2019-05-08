@@ -226,15 +226,24 @@ size_t TableBuilder::WriteMetaBlock(const Slice& block_contents,
         handle->set_offset(chunk_offset_);
         handle->set_size(block_contents.size());
     }
-    mchunk_->append(block_contents.data(), block_contents.size());
+    chunk_offset_ = mchunk_->append(block_contents.data(), block_contents.size());
     char trailer[kBlockTrailerSize];
     trailer[0] = type;
     uint32_t crc = crc32c::Value(block_contents.data(), block_contents.size());
     crc = crc32c::Extend(crc, trailer, 1);  // Extend crc to cover block type
     EncodeFixed32(trailer+1, crc32c::Mask(crc));
-    mchunk_->append(trailer, kBlockTrailerSize);
-    chunk_offset_ += block_contents.size() + kBlockTrailerSize;
+    chunk_offset_ = mchunk_->append(trailer, kBlockTrailerSize);
+    //DEBUG_T("chunk_offset_:%llu\n", chunk_offset_);
     return block_contents.size() + kBlockTrailerSize;
+}
+
+size_t TableBuilder::WriteMetaBlock(BlockBuilder* block, 
+        BlockHandle* handle) {
+  assert(ok());
+  Slice block_contents = block->Finish();
+  size_t blocksize = WriteMetaBlock(block_contents, kNoCompression, handle);
+  block->Reset();
+  return blocksize;
 }
 ///////////////////meggie
 
@@ -260,6 +269,10 @@ Status TableBuilder::Finish() {
     DEBUG_T("filter_block len:%zu\n", filter_len);
     meta_bytes += filter_len;
     filter_lens.insert(filter_len);
+    if(mchunk_) {
+       WriteMetaBlock(filter_block_contents, kNoCompression, 
+               &filter_block_handle); 
+    }
     ////////////meggie
   }
 
@@ -277,9 +290,17 @@ Status TableBuilder::Finish() {
 
     // TODO(postrelease): Add stats and other meta blocks
     //////meggie
-    size_t metaindex_len = WriteBlock(&meta_index_block, &metaindex_block_handle);
+    //size_t metaindex_len = WriteBlock(&meta_index_block, &metaindex_block_handle);
+    Slice metaindex_block_contents = meta_index_block.Finish();
+    size_t metaindex_len = WriteRawBlock(metaindex_block_contents, kNoCompression,
+                  &metaindex_block_handle);
+    meta_index_block.Reset();
     DEBUG_T("metaindex_block len:%zu\n", metaindex_len);
     meta_bytes += metaindex_len;
+    if(mchunk_) {
+       //WriteMetaBlock(metaindex_block_contents, kNoCompression, &metaindex_block_handle); 
+       WriteMetaBlock(metaindex_block_contents, kNoCompression, nullptr); 
+    }
     //////meggie
   }
 
@@ -293,10 +314,18 @@ Status TableBuilder::Finish() {
       r->pending_index_entry = false;
     }
     //////meggie
-    size_t index_len = WriteBlock(&r->index_block, &index_block_handle);
+    //size_t index_len = WriteBlock(&r->index_block, &index_block_handle);
+    Slice index_block_contents = r->index_block.Finish();
+    size_t index_len = WriteRawBlock(index_block_contents, kNoCompression,
+                  &index_block_handle);
+    r->index_block.Reset();
     DEBUG_T("index_block len:%zu\n", index_len);
     meta_bytes += index_len;
     index_lens.insert(index_len);
+    if(mchunk_) {
+       //WriteMetaBlock(index_block_contents, kNoCompression, &index_block_handle); 
+       WriteMetaBlock(index_block_contents, kNoCompression, nullptr); 
+    }
     //////meggie
   }
 
@@ -312,6 +341,10 @@ Status TableBuilder::Finish() {
     size_t footer_len = footer_encoding.size();
     DEBUG_T("footer len:%zu\n", footer_len);
     meta_bytes += footer_len;
+    if(mchunk_) {
+       chunk_offset_ = mchunk_->append(footer_encoding.data(), footer_encoding.size());
+       DEBUG_T("after write footer, chunk_offset_:%llu\n", chunk_offset_);
+    }
     //////meggie
     if (r->status.ok()) {
       r->offset += footer_encoding.size();
@@ -320,6 +353,9 @@ Status TableBuilder::Finish() {
   
   DEBUG_T("finaly, sstable meta len:%zu\n", meta_bytes);
   meta_lens.insert(meta_bytes);
+  /////////meggie
+  mchunk_->flush();
+  /////////meggie
   
   return r->status;
 }

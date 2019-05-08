@@ -15,22 +15,27 @@ namespace leveldb{
     : number_(number),
       addr_(addr),
       size_(0) {
+          current_ptr_ = addr_ + 8;
     }
    
-    void META_Chunk::append(const void* ptr, uint64_t size) {
+    uint64_t META_Chunk::append(const void* ptr, uint64_t size) {
         if(size_ + size > CHUNK_SIZE) {
             fprintf(stderr, "meta.cc append, overflow exit, name=%06llu.ldb, chunk->size_:%llu, size:%llu\n",
                     static_cast<unsigned long long>(number_), size_, size);
             exit(9);
         }
-        char* current_ptr = addr_ + size_;
-        memcpy(current_ptr, ptr, size);
+        memcpy(current_ptr_, ptr, size);
+        current_ptr_ += size;
 
         size_ += size;
+
+        return (current_ptr_ - addr_);
     }
 
     void META_Chunk::flush() {
-       flush_cache(addr_, size_); 
+       DEBUG_T("flush, size_:%llu\n", size_);
+       *addr_ = size_;
+       flush_cache(addr_, (8 + size_)); 
     }
 
     META::META(const std::string& nvm_file, uint64_t file_size, bool recovery) 
