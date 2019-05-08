@@ -16,9 +16,11 @@
 #include "util/crc32c.h"
 ///////////////meggie
 #include "util/debug.h"
+#include "db/meta.h"
 
 std::set<size_t> filter_lens;
 std::set<size_t> index_lens;
+std::set<size_t> meta_lens;
 ///////////////meggie
 namespace leveldb {
 
@@ -66,9 +68,15 @@ struct TableBuilder::Rep {
   }
 };
 
-TableBuilder::TableBuilder(const Options& options, WritableFile* file)
+TableBuilder::TableBuilder(const Options& options, 
+        WritableFile* file,
+        ///////////meggie
+        META_Chunk* mchunk)
+        ///////////meggie
     : rep_(new Rep(options, file)),
     /////////////meggie
+    mchunk_(mchunk),
+    chunk_offset_(0),
     meta_bytes(0) {
     /////////////meggie
   if (rep_->filter_block != nullptr) {
@@ -80,6 +88,9 @@ TableBuilder::~TableBuilder() {
   assert(rep_->closed);  // Catch errors where caller forgot to call Finish()
   delete rep_->filter_block;
   delete rep_;
+  //////////meggie
+  delete mchunk_;
+  //////////meggie
 }
 
 Status TableBuilder::ChangeOptions(const Options& options) {
@@ -176,11 +187,11 @@ size_t TableBuilder::WriteBlock(BlockBuilder* block, BlockHandle* handle) {
       break;
     }
   }
-  WriteRawBlock(block_contents, type, handle);
+  size_t blocksize = WriteRawBlock(block_contents, type, handle);
   r->compressed_output.clear();
   block->Reset();
   //////////meggie
-  return block_contents.size();
+  return blocksize;
   //////////meggie
 }
 
@@ -203,9 +214,30 @@ size_t TableBuilder::WriteRawBlock(const Slice& block_contents,
     }
   }
   //////////meggie
-  return block_contents.size();
+  return block_contents.size() + kBlockTrailerSize;
   //////////meggie
 }
+
+///////////////////meggie
+size_t TableBuilder::WriteMetaBlock(const Slice& block_contents,
+        CompressionType type,
+        BlockHandle* handle) {
+    if(handle != nullptr){
+        handle->set_offset(chunk_offset_);
+        handle->set_size(block_contents.size());
+    }
+    mchunk_->append(block_contents.data(), block_contents.size());
+    char trailer[kBlockTrailerSize];
+    trailer[0] = type;
+    uint32_t crc = crc32c::Value(block_contents.data(), block_contents.size());
+    crc = crc32c::Extend(crc, trailer, 1);  // Extend crc to cover block type
+    EncodeFixed32(trailer+1, crc32c::Mask(crc));
+    mchunk_->append(trailer, kBlockTrailerSize);
+    chunk_offset_ += block_contents.size() + kBlockTrailerSize;
+    return block_contents.size() + kBlockTrailerSize;
+}
+///////////////////meggie
+
 
 Status TableBuilder::status() const {
   return rep_->status;
@@ -222,7 +254,8 @@ Status TableBuilder::Finish() {
   // Write filter block
   if (ok() && r->filter_block != nullptr) {
     ////////////meggie
-    size_t filter_len = WriteRawBlock(r->filter_block->Finish(), kNoCompression,
+    Slice filter_block_contents = r->filter_block->Finish();
+    size_t filter_len = WriteRawBlock(filter_block_contents, kNoCompression,
                   &filter_block_handle);
     DEBUG_T("filter_block len:%zu\n", filter_len);
     meta_bytes += filter_len;
@@ -286,6 +319,7 @@ Status TableBuilder::Finish() {
   }
   
   DEBUG_T("finaly, sstable meta len:%zu\n", meta_bytes);
+  meta_lens.insert(meta_bytes);
   
   return r->status;
 }

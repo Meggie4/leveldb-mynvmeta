@@ -19,7 +19,11 @@ Status BuildTable(const std::string& dbname,
                   const Options& options,
                   TableCache* table_cache,
                   Iterator* iter,
-                  FileMetaData* meta) {
+                  FileMetaData* meta,
+                  ////////////meggie
+                  META_Chunk* mchunk
+                  ////////////meggie
+                  ) {
   Status s;
   meta->file_size = 0;
   iter->SeekToFirst();
@@ -32,7 +36,10 @@ Status BuildTable(const std::string& dbname,
       return s;
     }
 
-    TableBuilder* builder = new TableBuilder(options, file);
+    ////////////meggie
+    TableBuilder* builder = new TableBuilder(options, 
+            file, mchunk);
+    ////////////meggie
     meta->smallest.DecodeFrom(iter->key());
     for (; iter->Valid(); iter->Next()) {
       Slice key = iter->key();

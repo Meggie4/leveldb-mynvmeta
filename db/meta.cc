@@ -16,10 +16,10 @@ namespace leveldb{
       size_(0) {
     }
    
-    void META_Chunk::append(const void* ptr, size_t size, META_Chunk* mchunk) {
-        if(mchunk->size_ + size > CHUNK_SIZE) {
+    void META_Chunk::append(const void* ptr, size_t size) {
+        if(size_ + size > CHUNK_SIZE) {
             fprintf(stderr, "meta.cc append, overflow exit, name=%06llu.ldb, chunk->size_:%lld, size:%zu\n",
-                    static_cast<unsigned long long>(number_), mchunk->size_, size);
+                    static_cast<unsigned long long>(number_), size_, size);
             exit(9);
         }
         char* current_ptr = addr_ + size_;
@@ -117,15 +117,8 @@ namespace leveldb{
         bplus_tree_put(index_tree_, number, index);
     }
 
-    bool META::reserve_chunk(const std::string& chunk_name) {
+    bool META::reserve_chunk(uint64_t number) {
         //get number, 
-        std::string short_file_name = chunk_name;
-        if(short_file_name.find("/mnt/ssd/") != -1) {
-            int found = chunk_name.find_last_of("/");
-            short_file_name = chunk_name.substr(found + 1);
-        }
-        uint64_t number = atoi(short_file_name.c_str());
-        
         uint64_t result = number % chunk_amount_, tmp;
         
         if(remaining_amount_ <= 0){
@@ -153,16 +146,9 @@ namespace leveldb{
         }
     }
 
-    bool META::reserve_and_alloc_chunk(const std::string& chunk_name, 
+    bool META::reserve_and_alloc_chunk(uint64_t number, 
             META_Chunk** mchunk) {
         //get number, 
-        std::string short_file_name = chunk_name;
-        if(short_file_name.find("/mnt/ssd/") != -1) {
-            int found = chunk_name.find_last_of("/");
-            short_file_name = chunk_name.substr(found + 1);
-        }
-        uint64_t number = atoi(short_file_name.c_str());
-        
         uint64_t result = number % chunk_amount_, tmp;
         
         if(remaining_amount_ <= 0){
@@ -194,14 +180,7 @@ namespace leveldb{
         }
     }
 
-    META_Chunk* META::alloc_chunk(const std::string& chunk_name) {
-        std::string short_file_name = chunk_name;
-        if(short_file_name.find("/mnt/ssd/") != -1) {
-            int found = chunk_name.find_last_of("/");
-            short_file_name = chunk_name.substr(found + 1);
-        }
-        uint64_t number = atoi(short_file_name.c_str());
-        
+    META_Chunk* META::alloc_chunk(uint64_t number) {
         uint64_t chunk_index = get_chunk_index(number);
         char* phy_addr = mmap_start_ + chunk_offset_ + chunk_index * CHUNK_SIZE; 
         

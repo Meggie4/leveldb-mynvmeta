@@ -22,10 +22,18 @@ class TableCache;
 class Version;
 class VersionEdit;
 class VersionSet;
+//////////meggie
+class META;
+//////////meggie
 
 class DBImpl : public DB {
  public:
-  DBImpl(const Options& options, const std::string& dbname);
+  DBImpl(const Options& options, 
+          const std::string& dbname,
+          ///////////meggie
+          const std::string& dbname_nvm = "/mnt/pmemdir"
+          );
+          ///////////meggie
   virtual ~DBImpl();
 
   // Implementations of the DB interface
@@ -127,6 +135,9 @@ class DBImpl : public DB {
   const bool owns_info_log_;
   const bool owns_cache_;
   const std::string dbname_;
+  /////////////meggie
+  const std::string dbname_nvm_;
+  /////////////meggie
 
   // table_cache_ provides its own synchronization
   TableCache* const table_cache_;
@@ -191,6 +202,10 @@ class DBImpl : public DB {
   };
   CompactionStats stats_[config::kNumLevels] GUARDED_BY(mutex_);
 
+  /////////////meggie
+  META* meta_;
+  /////////////meggie
+  
   // No copying allowed
   DBImpl(const DBImpl&);
   void operator=(const DBImpl&);
@@ -205,7 +220,11 @@ class DBImpl : public DB {
 Options SanitizeOptions(const std::string& db,
                         const InternalKeyComparator* icmp,
                         const InternalFilterPolicy* ipolicy,
-                        const Options& src);
+                        const Options& src,
+                        /////////////meggie
+                        const std::string& dbname_nvm = "/mnt/pmemdir"
+                        /////////////meggie
+                        );
 
 }  // namespace leveldb
 

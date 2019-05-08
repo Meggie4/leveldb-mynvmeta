@@ -20,8 +20,10 @@
 
 ////////////meggie
 #include <set>
+
 extern std::set<size_t> filter_lens;
 extern std::set<size_t> index_lens;
+extern std::set<size_t> meta_lens;
 ////////////meggie
 
 namespace leveldb {
@@ -29,13 +31,19 @@ namespace leveldb {
 class BlockBuilder;
 class BlockHandle;
 class WritableFile;
+//////////////meggie
+class META_Chunk;
+//////////////meggie
 
 class LEVELDB_EXPORT TableBuilder {
  public:
   // Create a builder that will store the contents of the table it is
   // building in *file.  Does not close the file.  It is up to the
   // caller to close the file after calling Finish().
-  TableBuilder(const Options& options, WritableFile* file);
+  TableBuilder(const Options& options, WritableFile* file,
+          ///////////meggie
+          META_Chunk* mchunk = nullptr);
+          ///////////meggie
 
   TableBuilder(const TableBuilder&) = delete;
   void operator=(const TableBuilder&) = delete;
@@ -91,7 +99,10 @@ class LEVELDB_EXPORT TableBuilder {
   //void WriteRawBlock(const Slice& data, CompressionType, BlockHandle* handle);
   size_t WriteBlock(BlockBuilder* block, BlockHandle* handle);
   size_t WriteRawBlock(const Slice& data, CompressionType, BlockHandle* handle);
+    size_t WriteMetaBlock(const Slice& block_contents, CompressionType type, BlockHandle* handle);
   size_t meta_bytes;
+  META_Chunk* mchunk_; 
+  uint64_t chunk_offset_;
   //////////////meggie
 
   struct Rep;

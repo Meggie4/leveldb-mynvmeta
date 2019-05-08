@@ -29,6 +29,12 @@ std::string LogFileName(const std::string& dbname, uint64_t number) {
   return MakeFileName(dbname, number, "log");
 }
 
+///////////////////////meggie
+std::string MetaFileName(const std::string& dbname, uint64_t number){
+  assert(number > 0);
+  return MakeFileName(dbname, number, "met");
+}
+///////////////////////meggie
 std::string TableFileName(const std::string& dbname, uint64_t number) {
   assert(number > 0);
   return MakeFileName(dbname, number, "ldb");

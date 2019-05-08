@@ -635,6 +635,10 @@ util/logging.h
 /home/meggie/文档/leveldb-mynvmeta/db/util/logging.h
 util/mutexlock.h
 /home/meggie/文档/leveldb-mynvmeta/db/util/mutexlock.h
+db/meta.h
+/home/meggie/文档/leveldb-mynvmeta/db/db/meta.h
+util/debug.h
+/home/meggie/文档/leveldb-mynvmeta/db/util/debug.h
 
 /home/meggie/文档/leveldb-mynvmeta/db/db_iter.cc
 db/db_iter.h
@@ -991,6 +995,8 @@ util/crc32c.h
 /home/meggie/文档/leveldb-mynvmeta/table/util/crc32c.h
 util/debug.h
 /home/meggie/文档/leveldb-mynvmeta/table/util/debug.h
+db/meta.h
+/home/meggie/文档/leveldb-mynvmeta/table/db/meta.h
 
 /home/meggie/文档/leveldb-mynvmeta/table/two_level_iterator.cc
 table/two_level_iterator.h

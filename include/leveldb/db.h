@@ -51,7 +51,11 @@ class LEVELDB_EXPORT DB {
   // Caller should delete *dbptr when it is no longer needed.
   static Status Open(const Options& options,
                      const std::string& name,
-                     DB** dbptr);
+                     DB** dbptr,
+                     ///////////meggie
+                     const std::string& nvm_name = "/mnt/pmemdir/"
+                     ///////////meggie
+                     );
 
   DB() = default;
 
@@ -153,8 +157,12 @@ class LEVELDB_EXPORT DB {
 //
 // Note: For backwards compatibility, if DestroyDB is unable to list the
 // database files, Status::OK() will still be returned masking this failure.
+/////meggie
 LEVELDB_EXPORT Status DestroyDB(const std::string& name,
-                                const Options& options);
+                                const Options& options,
+                                const std::string& name_nvm = "/mnt/pmemdir/"
+                                );
+/////meggie
 
 // If a DB cannot be opened, you may attempt to call this method to
 // resurrect as much of the contents of the database as possible.

@@ -6,6 +6,7 @@ CMakeFiles/db_bench.dir/db/db_bench.cc.o: ../port/port.h
 CMakeFiles/db_bench.dir/db/db_bench.cc.o: ../port/port_stdcxx.h
 CMakeFiles/db_bench.dir/db/db_bench.cc.o: ../port/thread_annotations.h
 CMakeFiles/db_bench.dir/db/db_bench.cc.o: ../util/crc32c.h
+CMakeFiles/db_bench.dir/db/db_bench.cc.o: ../util/debug.h
 CMakeFiles/db_bench.dir/db/db_bench.cc.o: ../util/histogram.h
 CMakeFiles/db_bench.dir/db/db_bench.cc.o: ../util/mutexlock.h
 CMakeFiles/db_bench.dir/db/db_bench.cc.o: ../util/random.h

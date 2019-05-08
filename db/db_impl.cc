@@ -35,6 +35,10 @@
 #include "util/logging.h"
 #include "util/mutexlock.h"
 
+///////////meggie
+#include "db/meta.h"
+#include "util/debug.h"
+///////////meggie
 
 namespace leveldb {
 
@@ -93,7 +97,11 @@ static void ClipToRange(T* ptr, V minvalue, V maxvalue) {
 Options SanitizeOptions(const std::string& dbname,
                         const InternalKeyComparator* icmp,
                         const InternalFilterPolicy* ipolicy,
-                        const Options& src) {
+                        const Options& src,
+                        /////////////meggie
+                        const std::string& dbname_nvm
+                        /////////////meggie
+                        ) {
   Options result = src;
   result.comparator = icmp;
   result.filter_policy = (src.filter_policy != nullptr) ? ipolicy : nullptr;
@@ -104,6 +112,9 @@ Options SanitizeOptions(const std::string& dbname,
   if (result.info_log == nullptr) {
     // Open a log file in the same directory as the db
     src.env->CreateDir(dbname);  // In case it does not exist
+    //////////meggie
+    src.env->CreateDir(dbname_nvm);
+    //////////meggie
     src.env->RenameFile(InfoLogFileName(dbname), OldInfoLogFileName(dbname));
     Status s = src.env->NewLogger(InfoLogFileName(dbname), &result.info_log);
     if (!s.ok()) {
@@ -122,12 +133,20 @@ static int TableCacheSize(const Options& sanitized_options) {
   return sanitized_options.max_open_files - kNumNonTableCacheFiles;
 }
 
-DBImpl::DBImpl(const Options& raw_options, const std::string& dbname)
+DBImpl::DBImpl(const Options& raw_options, 
+        const std::string& dbname,
+        /////////meggie
+        const std::string& dbname_nvm)
+        /////////meggie
     : env_(raw_options.env),
       internal_comparator_(raw_options.comparator),
       internal_filter_policy_(raw_options.filter_policy),
       options_(SanitizeOptions(dbname, &internal_comparator_,
-                               &internal_filter_policy_, raw_options)),
+                               &internal_filter_policy_, raw_options,
+                               ///////////meggie
+                               dbname_nvm
+                               ///////////meggie
+                               )),
       owns_info_log_(options_.info_log != raw_options.info_log),
       owns_cache_(options_.block_cache != raw_options.block_cache),
       dbname_(dbname),
@@ -144,9 +163,14 @@ DBImpl::DBImpl(const Options& raw_options, const std::string& dbname)
       tmp_batch_(new WriteBatch),
       background_compaction_scheduled_(false),
       manual_compaction_(nullptr),
+      //////////meggie
+      meta_(nullptr),
+      dbname_nvm_(dbname_nvm),
+      //////////meggie
       versions_(new VersionSet(dbname_, &options_, table_cache_,
                                &internal_comparator_)) {
   has_imm_.Release_Store(nullptr);
+  
 }
 
 DBImpl::~DBImpl() {
@@ -169,6 +193,9 @@ DBImpl::~DBImpl() {
   delete log_;
   delete logfile_;
   delete table_cache_;
+  ///////////meggie
+  delete meta_;
+  ///////////meggie
 
   if (owns_info_log_) {
     delete options_.info_log;
@@ -505,7 +532,13 @@ Status DBImpl::WriteLevel0Table(MemTable* mem, VersionEdit* edit,
   Status s;
   {
     mutex_.Unlock();
-    s = BuildTable(dbname_, env_, options_, table_cache_, iter, &meta);
+    ////////////////meggie
+    META_Chunk* mchunk = nullptr;
+    if(meta_)
+        meta_->reserve_and_alloc_chunk(meta.number, &mchunk);
+    s = BuildTable(dbname_, env_, options_, table_cache_, iter, &meta,
+            mchunk);
+    ////////////////meggie
     mutex_.Lock();
   }
 
@@ -812,7 +845,14 @@ Status DBImpl::OpenCompactionOutputFile(CompactionState* compact) {
   std::string fname = TableFileName(dbname_, file_number);
   Status s = env_->NewWritableFile(fname, &compact->outfile);
   if (s.ok()) {
-    compact->builder = new TableBuilder(options_, compact->outfile);
+    ////////////meggie
+    META_Chunk* mchunk = nullptr;
+    if(meta_)
+        meta_->reserve_and_alloc_chunk(file_number, &mchunk);
+    compact->builder = new TableBuilder(options_, 
+            compact->outfile,
+            mchunk);
+    ////////////meggie
   }
   return s;
 }
@@ -1499,10 +1539,16 @@ Status DB::Delete(const WriteOptions& opt, const Slice& key) {
 DB::~DB() { }
 
 Status DB::Open(const Options& options, const std::string& dbname,
-                DB** dbptr) {
+                DB** dbptr,
+                ////////////meggie
+                const std::string& dbname_nvm
+                ////////////meggie
+                ) {
   *dbptr = nullptr;
 
-  DBImpl* impl = new DBImpl(options, dbname);
+  ////////////meggie
+  DBImpl* impl = new DBImpl(options, dbname, dbname_nvm);
+  ////////////meggie
   impl->mutex_.Lock();
   VersionEdit edit;
   // Recover handles create_if_missing, error_if_exists
@@ -1523,6 +1569,16 @@ Status DB::Open(const Options& options, const std::string& dbname,
       impl->mem_->Ref();
     }
   }
+  ////////////meggie
+  if(s.ok() && impl->meta_ == nullptr) {
+      uint64_t meta_number = 1;
+      size_t meta_size = (2 << 30);
+      std::string meta_name = MetaFileName(dbname_nvm, meta_number);
+      DEBUG_T("to create META\n");
+      //impl->meta = new META(meta_name, meta_size, false);
+  }
+  ////////////meggie
+
   if (s.ok() && save_manifest) {
     edit.SetPrevLogNumber(0);  // No older logs needed after recovery.
     edit.SetLogNumber(impl->logfile_number_);
@@ -1545,7 +1601,10 @@ Status DB::Open(const Options& options, const std::string& dbname,
 Snapshot::~Snapshot() {
 }
 
-Status DestroyDB(const std::string& dbname, const Options& options) {
+Status DestroyDB(const std::string& dbname, const Options& options,
+        ////////////meggie
+        const std::string& dbname_nvm) {
+        ////////////meggie
   Env* env = options.env;
   std::vector<std::string> filenames;
   Status result = env->GetChildren(dbname, &filenames);
@@ -1573,6 +1632,21 @@ Status DestroyDB(const std::string& dbname, const Options& options) {
     env->DeleteFile(lockname);
     env->DeleteDir(dbname);  // Ignore error in case dir contains other files
   }
+  //////////////meggie
+  std::vector<std::string> filenames_nvm;
+  result = env->GetChildren(dbname_nvm, &filenames_nvm);
+  if(!result.ok()){
+        DEBUG_T("nvm GetChildren failed\n");
+        return Status::OK();
+  }
+  for (size_t i = 0; i < filenames_nvm.size(); i++) {
+        Status del = env->DeleteFile(dbname_nvm + "/" + filenames[i]);
+        if (result.ok() && !del.ok()) {
+          result = del;
+        }
+  }
+  env->DeleteDir(dbname_nvm);  
+  //////////////meggie
   return result;
 }
 

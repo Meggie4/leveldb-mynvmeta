@@ -36,7 +36,7 @@ namespace leveldb {
         
         public:
             META_Chunk(uint64_t number, char* addr);
-            void append(const void* ptr, size_t size, META_Chunk* mchunk); 
+            void append(const void* ptr, size_t size); 
             void flush();
     };
 
@@ -44,9 +44,9 @@ namespace leveldb {
         public:
             META(const std::string& nvm_file, size_t size, bool recovery = false);
             ~META();
-            bool reserve_chunk(const std::string& chunk_name);
-            META_Chunk* alloc_chunk(const std::string& chunk_name);
-            bool reserve_and_alloc_chunk(const std::string& chunk_name, META_Chunk** mchunk);
+            bool reserve_chunk(uint64_t number);
+            META_Chunk* alloc_chunk(uint64_t number);
+            bool reserve_and_alloc_chunk(uint64_t number, META_Chunk** mchunk);
             inline uint64_t get_chunk_index(uint64_t number);
             inline void update_chunk_index(uint64_t number, uint64_t index);
         public:
