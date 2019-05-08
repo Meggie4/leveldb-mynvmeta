@@ -33,14 +33,29 @@ namespace leveldb {
             char* addr_;
             uint64_t size_;
             uint64_t number_;
+            uint64_t index_;
             char* current_ptr_;
             char* length_ptr_;
         
         public:
-            META_Chunk(uint64_t number, char* addr);
+            META_Chunk(uint64_t number, uint64_t index, char* addr);
             uint64_t append(const void* ptr, uint64_t size); 
             void set_length(uint64_t len);
             void flush();
+
+            uint64_t get_number() { 
+                uint64_t res = *((uint64_t*) current_ptr_); 
+                current_ptr_ += 8;
+                return res;
+            }
+            
+            char* get_blockcontents(uint64_t len) {
+                char* res = current_ptr_;
+                current_ptr_ += len;
+                return res;
+            }
+
+            uint64_t get_index() {return index_;}
     };
 
     class META {

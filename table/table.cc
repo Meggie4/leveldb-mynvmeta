@@ -85,11 +85,37 @@ Status Table::Open(const Options& options,
 
 ///////////////meggie
 Status Table::OpenByMeta(const Options& Options,
-                        uint64_t file_number,
-                        uint64_t file_size,
-                        Table** table) {
-   Status s;
-   return s;
+                        RandomAccessFile* file,
+                        META_Chunk* mchunk,
+                        Table** table) { 
+    Status s;
+    uint64_t magic_number = mchunk->get_number();
+    if(magic_number != kTableMagicNumber)
+       return Status::Corruption("not a sstable meta (bad magic number)");
+    
+    ///////filter block 
+    uint64_t filter_block_len = mchunk->get_number();
+    Slice filter_data = Slice(mchunk->get_blockcontents(filter_block_len),
+                                filter_block_len);
+
+    /////index_block
+    BlockContents index_block_contents;
+    uint64_t index_block_len = mchunk->get_number();
+    index_block_contents.data = Slice(mchunk->get_blockcontents(index_block_len),
+                                index_block_len);
+    index_block_contents.cachable = false;
+    index_block_contents.heap_allocated = false;
+    Block* index_block = new Block(index_block_contents);
+    
+    Rep* rep = new Table::Rep;
+    rep->options = options;
+    rep->file = file;
+    rep->index_block = index_block;
+    rep->cache_id = (options.block_cache ? mchunk->get_index() : 0);
+    rep->filter_data = nullptr; 
+    rep_->filter = new FilterBlockReader(rep_->options.filter_policy, filter_data);
+    *table = new Table(rep);
+    return s;
 }
 
 ///////////////meggie

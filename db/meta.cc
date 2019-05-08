@@ -14,6 +14,7 @@ struct bplus_tree_config{
 namespace leveldb{
     META_Chunk::META_Chunk(uint64_t number, char* addr)
     : number_(number),
+      index_(index),
       addr_(addr),
       length_ptr_(nullptr),
       size_(0) {
@@ -185,7 +186,7 @@ namespace leveldb{
                 OnlineMap_[tmp] = 1;
                 remaining_amount_--;
                 char* phy_addr = mmap_start_ + chunk_offset_ + tmp * CHUNK_SIZE; 
-                *mchunk = new META_Chunk(number, phy_addr);
+                *mchunk = new META_Chunk(number, tmp, phy_addr);
                 update_chunk_index(number, tmp);
                 uint64_t tree_index = get_chunk_index(number);
                 DEBUG_T("success to get META_Chunk, number:%llu, tmp:%llu, tree_index:%llu\n", number, tmp, tree_index);
@@ -199,7 +200,7 @@ namespace leveldb{
                 OnlineMap_[tmp] = 1;
                 remaining_amount_--;
                 char* phy_addr = mmap_start_ + chunk_offset_ + tmp * CHUNK_SIZE; 
-                *mchunk = new META_Chunk(number, phy_addr);
+                *mchunk = new META_Chunk(number, tmp, phy_addr);
                 update_chunk_index(number, tmp);
                 return true;
             }
@@ -210,6 +211,6 @@ namespace leveldb{
         uint64_t chunk_index = get_chunk_index(number);
         char* phy_addr = mmap_start_ + chunk_offset_ + chunk_index * CHUNK_SIZE; 
         
-        META_Chunk* mchunk = new META_Chunk(number, phy_addr);
+        META_Chunk* mchunk = new META_Chunk(number, chunk_index, phy_addr);
     }
 }
