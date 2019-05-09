@@ -227,15 +227,16 @@ size_t TableBuilder::WriteMetaBlock(const Slice& block_contents,
         handle->set_size(block_contents.size());
     }
     chunk_offset_ = mchunk_->append(block_contents.data(), block_contents.size());
-    char trailer[kBlockTrailerSize];
+    /*char trailer[kBlockTrailerSize];
     trailer[0] = type;
     uint32_t crc = crc32c::Value(block_contents.data(), block_contents.size());
     crc = crc32c::Extend(crc, trailer, 1);  // Extend crc to cover block type
     EncodeFixed32(trailer+1, crc32c::Mask(crc));
     chunk_offset_ = mchunk_->append(trailer, kBlockTrailerSize);
-    mchunk_->set_length(block_contents.size() + kBlockTrailerSize);
+    mchunk_->set_length(block_contents.size() + kBlockTrailerSize);*/
+    mchunk_->set_length(block_contents.size());
     //DEBUG_T("chunk_offset_:%llu\n", chunk_offset_);
-    return block_contents.size() + kBlockTrailerSize;
+    return block_contents.size();
 }
 
 size_t TableBuilder::WriteMetaBlock(BlockBuilder* block, 
@@ -267,9 +268,9 @@ Status TableBuilder::Finish() {
     Slice filter_block_contents = r->filter_block->Finish();
     size_t filter_len = WriteRawBlock(filter_block_contents, kNoCompression,
                   &filter_block_handle);
-    DEBUG_T("filter_block len:%zu\n", filter_len);
-    meta_bytes += filter_len;
-    filter_lens.insert(filter_len);
+    //DEBUG_T("filter_block len:%zu\n", filter_len);
+    //meta_bytes += filter_len;
+    //filter_lens.insert(filter_len);
     if(mchunk_) {
        //WriteMetaBlock(filter_block_contents, kNoCompression, &filter_block_handle); 
        WriteMetaBlock(filter_block_contents, kNoCompression, nullptr); 
@@ -314,9 +315,9 @@ Status TableBuilder::Finish() {
     size_t index_len = WriteRawBlock(index_block_contents, kNoCompression,
                   &index_block_handle);
     r->index_block.Reset();
-    DEBUG_T("index_block len:%zu\n", index_len);
-    meta_bytes += index_len;
-    index_lens.insert(index_len);
+    //DEBUG_T("index_block len:%zu\n", index_len);
+    //meta_bytes += index_len;
+    //index_lens.insert(index_len);
     if(mchunk_) {
        //WriteMetaBlock(index_block_contents, kNoCompression, &index_block_handle); 
        WriteMetaBlock(index_block_contents, kNoCompression, nullptr); 
@@ -337,8 +338,8 @@ Status TableBuilder::Finish() {
     }
   }
   
-  DEBUG_T("finally, sstable meta len:%zu\n", meta_bytes);
-  meta_lens.insert(meta_bytes);
+  //DEBUG_T("finally, sstable meta len:%zu\n", meta_bytes);
+  //meta_lens.insert(meta_bytes);
   /////////meggie
   mchunk_->flush();
   /////////meggie

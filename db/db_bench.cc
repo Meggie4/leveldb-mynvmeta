@@ -676,6 +676,7 @@ class Benchmark {
           delete db_;
           db_ = nullptr;
           //////////////meggie
+          DEBUG_T("use fresh db\n");
           DestroyDB(FLAGS_db, Options(), FLAGS_nvmdb);
           //////////////meggie
           Open();
@@ -685,7 +686,7 @@ class Benchmark {
       if (method != nullptr) {
         RunBenchmark(num_threads, name, method);
         //fprintf(stderr, "filter_lens:\n");
-        DEBUG_T("filter_lens:\n");
+        /*DEBUG_T("filter_lens:\n");
         for(auto iter = filter_lens.begin(); iter != filter_lens.end(); iter++)
             DEBUG_T(" %zu", *iter);
         DEBUG_T("\n");
@@ -696,7 +697,7 @@ class Benchmark {
         DEBUG_T("meta_lens:\n");
         for(auto iter = meta_lens.begin(); iter != meta_lens.end(); iter++)
             DEBUG_T(" %zu", *iter);
-        DEBUG_T("\n");
+        DEBUG_T("\n");*/
       }
     }
   }

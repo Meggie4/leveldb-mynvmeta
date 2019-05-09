@@ -18,6 +18,11 @@
 #include "util/coding.h"
 #include "util/logging.h"
 
+//////////////meggie
+#include "db/meta.h"
+#include "util/debug.h"
+//////////////meggie
+
 namespace leveldb {
 
 static size_t TargetFileSize(const Options* options) {
@@ -332,7 +337,11 @@ void Version::ForEachOverlapping(Slice user_key, Slice internal_key,
 Status Version::Get(const ReadOptions& options,
                     const LookupKey& k,
                     std::string* value,
-                    GetStats* stats) {
+                    GetStats* stats,
+                    ///////////meggie
+                    META* meta
+                    ///////////meggie
+                    ) {
   Slice ikey = k.internal_key();
   Slice user_key = k.user_key();
   const Comparator* ucmp = vset_->icmp_.user_comparator();
@@ -409,16 +418,14 @@ Status Version::Get(const ReadOptions& options,
                                    ikey, &saver, SaveValue);
 
       /////////////meggie
-      /*
-      std::string* valuebymeta;
+      std::string valuebymeta;
       Saver saverbymeta;
       saverbymeta.state = kNotFound;
       saverbymeta.ucmp = ucmp;
       saverbymeta.user_key = user_key;
-      saverbymeta.value = valuebymeta;
-      vset_->table_cache_->GetByMeta(options, f->number, meta_, 
+      saverbymeta.value = &valuebymeta;
+      Status smeta =vset_->table_cache_->GetByMeta(options, f->number, meta, 
                                ikey, &saverbymeta, SaveValue);
-      assert(*(saverbymeta.value) == *(saver.value));*/
       /////////////meggie
 
       if (!s.ok()) {
@@ -428,6 +435,11 @@ Status Version::Get(const ReadOptions& options,
         case kNotFound:
           break;      // Keep searching in other files
         case kFound:
+          ////////meggie
+          //DEBUG_T("found, saver.value:%s, saverbymeta.value:%s\n",
+            //      (*value).c_str(), valuebymeta.c_str());
+          assert(*(saverbymeta.value) == *(saver.value));
+          ////////meggie
           return s;
         case kDeleted:
           s = Status::NotFound(Slice());  // Use empty error message for speed

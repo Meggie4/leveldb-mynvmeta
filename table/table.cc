@@ -17,6 +17,7 @@
 
 //////////////meggie
 #include "db/meta.h"
+#include "util/debug.h"
 //////////////meggie
 
 namespace leveldb {
@@ -93,18 +94,33 @@ Status Table::Open(const Options& options,
 ///////////////meggie
 Status Table::OpenByMeta(const Options& options,
                         RandomAccessFile* file,
+                        uint64_t file_number,
                         META_Chunk* mchunk,
                         Table** table) { 
+    if(mchunk == nullptr) {
+       DEBUG_T("mchunk is nullptr\n");
+       return Status::Corruption("mchunk is nullptr");
+    }
+        
     Status s;
     uint64_t magic_number = mchunk->get_number();
-    if(magic_number != kTableMagicNumber)
+    if(magic_number != kTableMagicNumber){
+       DEBUG_T("not a sstable meta (bad magic_number),magic_number:%#X\n", magic_number);
        return Status::Corruption("not a sstable meta (bad magic number)");
+    }
+
+    uint64_t mfile_number = mchunk->get_number();
+    if(mfile_number != file_number) {
+       DEBUG_T("not the sstable number we search\n");
+       return Status::Corruption("not the sstable number we search");
+    }
     
     ///////filter block 
     uint64_t filter_block_len = mchunk->get_number();
     Slice filter_data = Slice(mchunk->get_blockcontents(filter_block_len),
                                 filter_block_len);
-
+    DEBUG_T("OpenByMeta, have success get filter_block, len:%llu\n", 
+            filter_block_len);
     /////index_block
     BlockContents index_block_contents;
     uint64_t index_block_len = mchunk->get_number();
@@ -113,17 +129,21 @@ Status Table::OpenByMeta(const Options& options,
     index_block_contents.cachable = false;
     index_block_contents.heap_allocated = false;
     Block* index_block = new Block(index_block_contents);
+    DEBUG_T("OpenByMeta, have success get index_block, len:%llu, data.size:%llu\n", index_block_len, index_block_contents.data.size());
     
     Rep* rep = new Table::Rep;
     rep->options = options;
     rep->file = file;
     ///rep->metaindex_handle = footer.metaindex_handle();
     rep->index_block = index_block;
-    rep->cache_id = (options.block_cache ? mchunk->get_index() : 0);
+    //rep->cache_id = (options.block_cache ? mchunk->get_index() : 0);
+    rep->cache_id = (options.block_cache ? options.block_cache->NewId() : 0);
     rep->filter_data = nullptr; 
     rep->filter = new FilterBlockReader(rep->options.filter_policy, filter_data);
     *table = new Table(rep);
     (*table)->SetMChunk(mchunk);
+
+    DEBUG_T("OpenByMeta, have success get table\n");
     return Status::OK();
 }
 
@@ -275,6 +295,10 @@ Status Table::InternalGet(const ReadOptions& options, const Slice& k,
   Iterator* iiter = rep_->index_block->NewIterator(rep_->options.comparator);
   iiter->Seek(k);
   if (iiter->Valid()) {
+    //////////////meggie 
+    DEBUG_T("InternalGet, iiter is valid\n");
+    //////////////meggie 
+
     Slice handle_value = iiter->value();
     FilterBlockReader* filter = rep_->filter;
     BlockHandle handle;
@@ -292,6 +316,12 @@ Status Table::InternalGet(const ReadOptions& options, const Slice& k,
       delete block_iter;
     }
   }
+  /////////////meggie
+  else {
+    DEBUG_T("InternalGet, iiter is not valid\n");
+  }
+  /////////////meggie
+
   if (s.ok()) {
     s = iiter->status();
   }

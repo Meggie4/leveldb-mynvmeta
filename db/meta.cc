@@ -18,11 +18,11 @@ namespace leveldb{
       index_(index),
       addr_(addr),
       length_ptr_(nullptr),
+      read_ptr_(addr_),
       size_(0) {
-          current_ptr_ = addr_ + 8;
-          length_ptr_ = current_ptr_;
+          length_ptr_ = addr_ + 16;
           current_ptr_ = length_ptr_ + 8;
-          size_ = 16;
+          size_ = 24;
     }
    
     uint64_t META_Chunk::append(const void* ptr, uint64_t size) {
@@ -40,7 +40,7 @@ namespace leveldb{
     }
 
     void META_Chunk::set_length(uint64_t len) {
-        *length_ptr_ = len;
+        *((uint64_t*)length_ptr_) = len;
         length_ptr_ = current_ptr_;
         current_ptr_ = length_ptr_ + 8;
         size_ += 8;
@@ -49,7 +49,8 @@ namespace leveldb{
     
     void META_Chunk::flush() {
        DEBUG_T("flush, size_:%llu\n", size_ - 8);
-       *addr_ = kTableMagicNumber;
+       *((uint64_t*)addr_) = kTableMagicNumber;
+       *((uint64_t*)(addr_ + 8)) = number_;
        flush_cache(addr_, size_ - 8); 
     }
 

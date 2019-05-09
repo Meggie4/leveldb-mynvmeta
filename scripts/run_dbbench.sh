@@ -43,7 +43,7 @@ NUMTHREAD=1
 #BENCHMARKS="customedworkloadzip080_4kwritelarge"
 #BENCHMARKS="customedworkloaduniform_4kwritelarge"
 
-BENCHMARKS="fillrandom"
+BENCHMARKS="fillrandom,readrandom"
 
 #NoveLSM specific parameters
 #NoveLSM uses memtable levels, always set to num_levels 2
@@ -51,6 +51,7 @@ BENCHMARKS="fillrandom"
 #write_buffer_size_2 specifies NVM memtable size; set it in few GBs for perfomance;
 OTHERPARAMS="--write_buffer_size=$DRAMBUFFSZ"
 
+#valgrind --verbose --log-file=valgrind --leak-check=full  --show-leak-kinds=all $DBBENCH/db_bench --threads=$NUMTHREAD --benchmarks=$BENCHMARKS $OTHERPARAMS
 $DBBENCH/db_bench --threads=$NUMTHREAD --benchmarks=$BENCHMARKS $OTHERPARAMS
 
 #Run all benchmarks

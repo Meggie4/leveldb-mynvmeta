@@ -13,6 +13,11 @@
 #include "util/coding.h"
 #include "util/logging.h"
 
+////////////meggie
+#include "util/debug.h"
+////////////meggie
+
+
 namespace leveldb {
 
 inline uint32_t Block::NumRestarts() const {
@@ -24,11 +29,13 @@ Block::Block(const BlockContents& contents)
     : data_(contents.data.data()),
       size_(contents.data.size()),
       owned_(contents.heap_allocated) {
+  //DEBUG_T("block, size_:%llu\n", size_);
   if (size_ < sizeof(uint32_t)) {
     size_ = 0;  // Error marker
   } else {
     size_t max_restarts_allowed = (size_-sizeof(uint32_t)) / sizeof(uint32_t);
     if (NumRestarts() > max_restarts_allowed) {
+      DEBUG_T("size is too small, NumRestarts:%lu\n", NumRestarts());
       // The size is too small for NumRestarts()
       size_ = 0;
     } else {
@@ -255,10 +262,12 @@ class Block::Iter : public Iterator {
 
 Iterator* Block::NewIterator(const Comparator* cmp) {
   if (size_ < sizeof(uint32_t)) {
+    DEBUG_T("bad block contents\n");
     return NewErrorIterator(Status::Corruption("bad block contents"));
   }
   const uint32_t num_restarts = NumRestarts();
   if (num_restarts == 0) {
+    DEBUG_T("num_restarts is 0\n");
     return NewEmptyIterator();
   } else {
     return new Iter(cmp, data_, restart_offset_, num_restarts);

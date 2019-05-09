@@ -35,6 +35,9 @@ class TableCache;
 class Version;
 class VersionSet;
 class WritableFile;
+/////////////meggie
+class META;
+/////////////meggie
 
 // Return the smallest index i such that files[i]->largest >= key.
 // Return files.size() if there is no such file.
@@ -69,8 +72,10 @@ class Version {
     FileMetaData* seek_file;
     int seek_file_level;
   };
+  ////////////////meggie
   Status Get(const ReadOptions&, const LookupKey& key, std::string* val,
-             GetStats* stats);
+             GetStats* stats, META* meta = nullptr);
+  ////////////////meggie
 
   // Adds "stats" into the current state.  Returns true if a new
   // compaction may need to be triggered, false otherwise.

@@ -11,6 +11,7 @@
 
 ///////////meggie
 #include "db/meta.h"
+#include "util/debug.h"
 ///////////meggie
 
 namespace leveldb {
@@ -159,15 +160,18 @@ Status TableCache::GetByMeta(const ReadOptions& options,
     }
 
     if (s.ok()) {
+      DEBUG_T("GetByMeta, to alloc_chunk, file_number:%llu\n",
+              file_number);
       META_Chunk* mchunk = meta->alloc_chunk(file_number);
-      s = Table::OpenByMeta(options_, file, mchunk, &table);
+      s = Table::OpenByMeta(options_, file, file_number, mchunk, &table);
     }
 
+    DEBUG_T("GetByMeta, has success alloc_chunk, file_number:%llu\n",
+            file_number);
     if(s.ok()) {
         s = table->InternalGet(options, k, arg, saver);
+        delete table;
     }
-    
-    delete table;
     
     return s;
 }
@@ -194,7 +198,7 @@ Iterator* TableCache::NewIteratorByMeta(const ReadOptions& options,
 
     if (s.ok()) {
       META_Chunk* mchunk = meta->alloc_chunk(file_number);
-      s = Table::OpenByMeta(options_, file, mchunk, &table);
+      s = Table::OpenByMeta(options_, file, file_number, mchunk, &table);
     }
 
     if(!s.ok()) {

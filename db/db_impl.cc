@@ -534,8 +534,11 @@ Status DBImpl::WriteLevel0Table(MemTable* mem, VersionEdit* edit,
     mutex_.Unlock();
     ////////////////meggie
     META_Chunk* mchunk = nullptr;
-    if(meta_)
+    if(meta_){
         meta_->reserve_and_alloc_chunk(meta.number, &mchunk);
+        //DEBUG_T("reserve_and_alloc_chunk, file number:%llu\n",
+          //      meta.number);
+    }
     s = BuildTable(dbname_, env_, options_, table_cache_, iter, &meta,
             mchunk);
     ////////////////meggie
@@ -847,8 +850,11 @@ Status DBImpl::OpenCompactionOutputFile(CompactionState* compact) {
   if (s.ok()) {
     ////////////meggie
     META_Chunk* mchunk = nullptr;
-    if(meta_)
+    if(meta_) {
+        //DEBUG_T("reserve_and_alloc_chunk, file number:%llu\n",
+          //      file_number);
         meta_->reserve_and_alloc_chunk(file_number, &mchunk);
+    }
     compact->builder = new TableBuilder(options_, 
             compact->outfile,
             mchunk);
@@ -1188,7 +1194,7 @@ Status DBImpl::Get(const ReadOptions& options,
     } else if (imm != nullptr && imm->Get(lkey, value, &s)) {
       // Done
     } else {
-      s = current->Get(options, lkey, value, &stats);
+      s = current->Get(options, lkey, value, &stats, meta_);
       have_stat_update = true;
     }
     mutex_.Lock();
