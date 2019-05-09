@@ -47,25 +47,24 @@ class TableCache {
              void* arg,
              void (*handle_result)(void*, const Slice&, const Slice&));
 
+  // Evict any entry for the specified file number
+  void Evict(uint64_t file_number);
+
   /////////////////meggie
   Status GetByMeta(const ReadOptions& options, 
                     uint64_t file_number,
+                    uint64_t file_size,
                     META* meta,
                     const Slice& k,
                     void* arg,
              void (*handle_result)(void*, const Slice&, const Slice&));
-  void EvictByMeta(META* meta, uint64_t file_number);
   Iterator* NewIteratorByMeta(const ReadOptions& options,
                                   uint64_t file_number,
+                                  uint64_t file_size,
                                   META* meta,
                                   Table** tableptr = nullptr);
   /////////////////meggie
-
-
-
-  // Evict any entry for the specified file number
-  void Evict(uint64_t file_number);
-
+ 
  private:
   Env* const env_;
   const std::string dbname_;

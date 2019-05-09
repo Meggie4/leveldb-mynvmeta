@@ -676,7 +676,7 @@ class Benchmark {
           delete db_;
           db_ = nullptr;
           //////////////meggie
-          DEBUG_T("use fresh db\n");
+          //DEBUG_T("use fresh db\n");
           DestroyDB(FLAGS_db, Options(), FLAGS_nvmdb);
           //////////////meggie
           Open();

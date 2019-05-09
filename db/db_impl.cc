@@ -294,6 +294,9 @@ void DBImpl::DeleteObsoleteFiles() {
       if (!keep) {
         if (type == kTableFile) {
           table_cache_->Evict(number);
+          /////////meggie
+          meta_->evict_chunk(number);
+          /////////meggie
         }
         Log(options_.info_log, "Delete type=%d #%lld\n",
             static_cast<int>(type),
@@ -903,20 +906,21 @@ Status DBImpl::FinishCompactionOutputFile(CompactionState* compact,
                                                current_bytes);
 
     ///////////////meggie
-    Iterator* itermeta = table_cache_->NewIteratorByMeta(ReadOptions(),
-                                                        output_number,
-                                                        meta_);
+   // Iterator* itermeta = table_cache_->NewIteratorByMeta(ReadOptions(),
+   //                                                     output_number,
+   //                                                     current_bytes,
+   //                                                     meta_);
 
-    iter->SeekToFirst();
-    itermeta->SeekToFirst();
-    if(!itermeta->Valid()) {
-        DEBUG_T("itermeta is not valid, file number:%llu\n",
-                output_number);
-    }
-    for(; iter->Valid() && itermeta->Valid(); iter->Next(), itermeta->Next()) {
-        assert((iter->key() == itermeta->key()) 
-                && (iter->value() == itermeta->value()));
-    }
+   // iter->SeekToFirst();
+   // itermeta->SeekToFirst();
+   // if(!itermeta->Valid()) {
+   //     DEBUG_T("itermeta is not valid, file number:%llu\n",
+   //             output_number);
+   // }
+   // for(; iter->Valid() && itermeta->Valid(); iter->Next(), itermeta->Next()) {
+   //     assert((iter->key() == itermeta->key()) 
+   //             && (iter->value() == itermeta->value()));
+   // }
     ///////////////meggie
     s = iter->status();
     delete iter;
@@ -1597,7 +1601,7 @@ Status DB::Open(const Options& options, const std::string& dbname,
       uint64_t meta_number = 1;
       uint64_t meta_size = (2 * 1024UL * 1024UL * 1024UL);
       std::string meta_name = MetaFileName(dbname_nvm, meta_number);
-      DEBUG_T("to create META,meta_size:%llu\n", meta_size);
+      //DEBUG_T("to create META,meta_size:%llu\n", meta_size);
       impl->meta_ = new META(meta_name, meta_size, false);
   }
   ////////////meggie
@@ -1659,12 +1663,12 @@ Status DestroyDB(const std::string& dbname, const Options& options,
   std::vector<std::string> filenames_nvm;
   result = env->GetChildren(dbname_nvm, &filenames_nvm);
   if(!result.ok()){
-        DEBUG_T("nvm GetChildren failed\n");
+        //DEBUG_T("nvm GetChildren failed\n");
         return Status::OK();
   }
   for (size_t i = 0; i < filenames_nvm.size(); i++) {
         Status del = env->DeleteFile(dbname_nvm + "/" + filenames_nvm[i]);
-        DEBUG_T("delete nvm file %s\n", filenames_nvm[i].c_str());
+        //DEBUG_T("delete nvm file %s\n", filenames_nvm[i].c_str());
         if (result.ok() && !del.ok()) {
           result = del;
         }

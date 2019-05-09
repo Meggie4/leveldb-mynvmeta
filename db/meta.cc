@@ -48,7 +48,7 @@ namespace leveldb{
 
     
     void META_Chunk::flush() {
-       DEBUG_T("flush, size_:%llu\n", size_ - 8);
+       //DEBUG_T("flush, size_:%llu\n", size_ - 8);
        *((uint64_t*)addr_) = kTableMagicNumber;
        *((uint64_t*)(addr_ + 8)) = number_;
        flush_cache(addr_, size_ - 8); 
@@ -191,7 +191,7 @@ namespace leveldb{
                 *mchunk = new META_Chunk(number, tmp, phy_addr);
                 update_chunk_index(number, tmp);
                 uint64_t tree_index = get_chunk_index(number);
-                DEBUG_T("success to get META_Chunk, number:%llu, tmp:%llu, tree_index:%llu\n", number, tmp, tree_index);
+                //DEBUG_T("success to get META_Chunk, number:%llu, tmp:%llu, tree_index:%llu\n", number, tmp, tree_index);
 
                 return true;
             }

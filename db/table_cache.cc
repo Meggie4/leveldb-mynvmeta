@@ -135,13 +135,9 @@ static void DeleteTable(void* arg1, void* arg2) {
   delete table;
 }
 
-void TableCache::EvictByMeta(META* meta,
-                    uint64_t file_number) {
-    meta->evict_chunk(file_number);
-}
-
 Status TableCache::GetByMeta(const ReadOptions& options, 
                     uint64_t file_number,
+                    uint64_t file_size,
                     META* meta,
                     const Slice& k,
                     void* arg,
@@ -160,14 +156,13 @@ Status TableCache::GetByMeta(const ReadOptions& options,
     }
 
     if (s.ok()) {
-      DEBUG_T("GetByMeta, to alloc_chunk, file_number:%llu\n",
-              file_number);
+      //DEBUG_T("GetByMeta, to alloc_chunk, file_number:%llu\n", file_number);
       META_Chunk* mchunk = meta->alloc_chunk(file_number);
-      s = Table::OpenByMeta(options_, file, file_number, mchunk, &table);
+      s = Table::OpenByMeta(options_, file, file_number, 
+                            file_size, mchunk, &table);
     }
 
-    DEBUG_T("GetByMeta, has success alloc_chunk, file_number:%llu\n",
-            file_number);
+    //DEBUG_T("GetByMeta, has success alloc_chunk, file_number:%llu\n", file_number);
     if(s.ok()) {
         s = table->InternalGet(options, k, arg, saver);
         delete table;
@@ -178,6 +173,7 @@ Status TableCache::GetByMeta(const ReadOptions& options,
   
 Iterator* TableCache::NewIteratorByMeta(const ReadOptions& options,
                                   uint64_t file_number,
+                                  uint64_t file_size, 
                                   META* meta,
                                   Table** tableptr) {
     if(tableptr != nullptr) {
@@ -198,7 +194,8 @@ Iterator* TableCache::NewIteratorByMeta(const ReadOptions& options,
 
     if (s.ok()) {
       META_Chunk* mchunk = meta->alloc_chunk(file_number);
-      s = Table::OpenByMeta(options_, file, file_number, mchunk, &table);
+      s = Table::OpenByMeta(options_, file, file_number, 
+                            file_size, mchunk, &table);
     }
 
     if(!s.ok()) {

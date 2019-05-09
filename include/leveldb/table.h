@@ -49,6 +49,7 @@ class LEVELDB_EXPORT Table {
   static Status OpenByMeta(const Options& Options,
                         RandomAccessFile* file,
                         uint64_t file_number,
+                        uint64_t file_size, 
                         META_Chunk* mchunk,
                         Table** table);
   //////////////meggie

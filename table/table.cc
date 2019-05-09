@@ -95,6 +95,7 @@ Status Table::Open(const Options& options,
 Status Table::OpenByMeta(const Options& options,
                         RandomAccessFile* file,
                         uint64_t file_number,
+                        uint64_t file_size,
                         META_Chunk* mchunk,
                         Table** table) { 
     if(mchunk == nullptr) {
@@ -119,8 +120,8 @@ Status Table::OpenByMeta(const Options& options,
     uint64_t filter_block_len = mchunk->get_number();
     Slice filter_data = Slice(mchunk->get_blockcontents(filter_block_len),
                                 filter_block_len);
-    DEBUG_T("OpenByMeta, have success get filter_block, len:%llu\n", 
-            filter_block_len);
+    //DEBUG_T("OpenByMeta, have success get filter_block, len:%llu\n", filter_block_len);
+    
     /////index_block
     BlockContents index_block_contents;
     uint64_t index_block_len = mchunk->get_number();
@@ -129,12 +130,17 @@ Status Table::OpenByMeta(const Options& options,
     index_block_contents.cachable = false;
     index_block_contents.heap_allocated = false;
     Block* index_block = new Block(index_block_contents);
-    DEBUG_T("OpenByMeta, have success get index_block, len:%llu, data.size:%llu\n", index_block_len, index_block_contents.data.size());
+    //DEBUG_T("OpenByMeta, have success get index_block, len:%llu, data.size:%llu\n", index_block_len, index_block_contents.data.size());
     
+    ////metaindex_handle 
+    BlockHandle metaindex_handle;
+    metaindex_handle.set_offset(file_size);
+    metaindex_handle.set_size(0);
+
     Rep* rep = new Table::Rep;
     rep->options = options;
     rep->file = file;
-    ///rep->metaindex_handle = footer.metaindex_handle();
+    rep->metaindex_handle = metaindex_handle;
     rep->index_block = index_block;
     //rep->cache_id = (options.block_cache ? mchunk->get_index() : 0);
     rep->cache_id = (options.block_cache ? options.block_cache->NewId() : 0);
@@ -143,7 +149,7 @@ Status Table::OpenByMeta(const Options& options,
     *table = new Table(rep);
     (*table)->SetMChunk(mchunk);
 
-    DEBUG_T("OpenByMeta, have success get table\n");
+    //DEBUG_T("OpenByMeta, have success get table\n");
     return Status::OK();
 }
 
@@ -296,7 +302,7 @@ Status Table::InternalGet(const ReadOptions& options, const Slice& k,
   iiter->Seek(k);
   if (iiter->Valid()) {
     //////////////meggie 
-    DEBUG_T("InternalGet, iiter is valid\n");
+    //DEBUG_T("InternalGet, iiter is valid\n");
     //////////////meggie 
 
     Slice handle_value = iiter->value();
@@ -318,7 +324,7 @@ Status Table::InternalGet(const ReadOptions& options, const Slice& k,
   }
   /////////////meggie
   else {
-    DEBUG_T("InternalGet, iiter is not valid\n");
+    //DEBUG_T("InternalGet, iiter is not valid\n");
   }
   /////////////meggie
 

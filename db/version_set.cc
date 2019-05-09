@@ -424,8 +424,7 @@ Status Version::Get(const ReadOptions& options,
       saverbymeta.ucmp = ucmp;
       saverbymeta.user_key = user_key;
       saverbymeta.value = &valuebymeta;
-      Status smeta =vset_->table_cache_->GetByMeta(options, f->number, meta, 
-                               ikey, &saverbymeta, SaveValue);
+      Status smeta =vset_->table_cache_->GetByMeta(options, f->number, f->file_size, meta, ikey, &saverbymeta, SaveValue);
       /////////////meggie
 
       if (!s.ok()) {
