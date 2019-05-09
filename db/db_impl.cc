@@ -901,6 +901,23 @@ Status DBImpl::FinishCompactionOutputFile(CompactionState* compact,
     Iterator* iter = table_cache_->NewIterator(ReadOptions(),
                                                output_number,
                                                current_bytes);
+
+    ///////////////meggie
+    Iterator* itermeta = table_cache_->NewIteratorByMeta(ReadOptions(),
+                                                        output_number,
+                                                        meta_);
+
+    iter->SeekToFirst();
+    itermeta->SeekToFirst();
+    if(!itermeta->Valid()) {
+        DEBUG_T("itermeta is not valid, file number:%llu\n",
+                output_number);
+    }
+    for(; iter->Valid() && itermeta->Valid(); iter->Next(), itermeta->Next()) {
+        assert((iter->key() == itermeta->key()) 
+                && (iter->value() == itermeta->value()));
+    }
+    ///////////////meggie
     s = iter->status();
     delete iter;
     if (s.ok()) {

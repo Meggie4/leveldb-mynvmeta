@@ -1,0 +1,410 @@
+delete nvm file .
+delete nvm file ..
+delete nvm file 000001.met
+to create META,meta_size:2147483648
+-----------------META SETUP---------------
+create nvm_file:/mnt/pmemdir/dbbench/000001.met
+success to setup bplustree
+chunk_amount:96240, remaining_amount:96240
+------------END META SETUP-----------
+use fresh db
+delete nvm file .
+delete nvm file ..
+delete nvm file 000001.met
+to create META,meta_size:2147483648
+-----------------META SETUP---------------
+create nvm_file:/mnt/pmemdir/dbbench/000001.met
+success to setup bplustree
+chunk_amount:96240, remaining_amount:96240
+------------END META SETUP-----------
+success to get META_Chunk, number:5, tmp:5, tree_index:5
+flush, size_:70621
+success to get META_Chunk, number:7, tmp:7, tree_index:7
+flush, size_:70609
+success to get META_Chunk, number:9, tmp:9, tree_index:9
+flush, size_:70611
+success to get META_Chunk, number:11, tmp:11, tree_index:11
+flush, size_:70621
+success to get META_Chunk, number:13, tmp:13, tree_index:13
+flush, size_:70649
+success to get META_Chunk, number:15, tmp:15, tree_index:15
+flush, size_:70617
+success to get META_Chunk, number:16, tmp:16, tree_index:16
+flush, size_:92163
+OpenByMeta, have success get filter_block, len:55075
+OpenByMeta, have success get index_block, len:37056, data.size:37056
+OpenByMeta, have success get table
+success to get META_Chunk, number:17, tmp:17, tree_index:17
+success to get META_Chunk, number:19, tmp:19, tree_index:19
+flush, size_:70629
+flush, size_:92171
+OpenByMeta, have success get filter_block, len:55075
+OpenByMeta, have success get index_block, len:37064, data.size:37064
+OpenByMeta, have success get table
+success to get META_Chunk, number:20, tmp:20, tree_index:20
+success to get META_Chunk, number:22, tmp:22, tree_index:22
+flush, size_:70592
+flush, size_:92172
+OpenByMeta, have success get filter_block, len:55075
+OpenByMeta, have success get index_block, len:37065, data.size:37065
+OpenByMeta, have success get table
+success to get META_Chunk, number:23, tmp:23, tree_index:23
+flush, size_:54248
+OpenByMeta, have success get filter_block, len:32531
+OpenByMeta, have success get index_block, len:21685, data.size:21685
+OpenByMeta, have success get table
+success to get META_Chunk, number:24, tmp:24, tree_index:24
+success to get META_Chunk, number:26, tmp:26, tree_index:26
+flush, size_:70635
+flush, size_:92214
+OpenByMeta, have success get filter_block, len:55071
+OpenByMeta, have success get index_block, len:37111, data.size:37111
+OpenByMeta, have success get table
+success to get META_Chunk, number:27, tmp:27, tree_index:27
+success to get META_Chunk, number:29, tmp:29, tree_index:29
+flush, size_:70612
+flush, size_:92205
+OpenByMeta, have success get filter_block, len:55071
+OpenByMeta, have success get index_block, len:37102, data.size:37102
+OpenByMeta, have success get table
+success to get META_Chunk, number:30, tmp:30, tree_index:30
+flush, size_:92206
+OpenByMeta, have success get filter_block, len:55071
+OpenByMeta, have success get index_block, len:37103, data.size:37103
+OpenByMeta, have success get table
+success to get META_Chunk, number:31, tmp:31, tree_index:31
+success to get META_Chunk, number:33, tmp:33, tree_index:33
+flush, size_:70630
+flush, size_:92199
+OpenByMeta, have success get filter_block, len:55071
+OpenByMeta, have success get index_block, len:37096, data.size:37096
+OpenByMeta, have success get table
+success to get META_Chunk, number:34, tmp:34, tree_index:34
+flush, size_:22735
+OpenByMeta, have success get filter_block, len:13634
+OpenByMeta, have success get index_block, len:9069, data.size:9069
+OpenByMeta, have success get table
+success to get META_Chunk, number:35, tmp:35, tree_index:35
+success to get META_Chunk, number:37, tmp:37, tree_index:37
+flush, size_:70612
+flush, size_:92185
+OpenByMeta, have success get filter_block, len:55075
+OpenByMeta, have success get index_block, len:37078, data.size:37078
+OpenByMeta, have success get table
+success to get META_Chunk, number:38, tmp:38, tree_index:38
+success to get META_Chunk, number:40, tmp:40, tree_index:40
+flush, size_:70618
+flush, size_:92183
+OpenByMeta, have success get filter_block, len:55075
+OpenByMeta, have success get index_block, len:37076, data.size:37076
+OpenByMeta, have success get table
+success to get META_Chunk, number:41, tmp:41, tree_index:41
+flush, size_:92194
+OpenByMeta, have success get filter_block, len:55075
+OpenByMeta, have success get index_block, len:37087, data.size:37087
+OpenByMeta, have success get table
+success to get META_Chunk, number:43, tmp:43, tree_index:43
+flush, size_:70619
+success to get META_Chunk, number:44, tmp:44, tree_index:44
+flush, size_:53836
+OpenByMeta, have success get filter_block, len:32280
+OpenByMeta, have success get index_block, len:21524, data.size:21524
+OpenByMeta, have success get table
+success to get META_Chunk, number:45, tmp:45, tree_index:45
+flush, size_:92318
+OpenByMeta, have success get filter_block, len:55121
+OpenByMeta, have success get index_block, len:37165, data.size:37165
+OpenByMeta, have success get table
+success to get META_Chunk, number:46, tmp:46, tree_index:46
+success to get META_Chunk, number:48, tmp:48, tree_index:48
+flush, size_:70627
+flush, size_:68200
+OpenByMeta, have success get filter_block, len:40771
+OpenByMeta, have success get index_block, len:27397, data.size:27397
+OpenByMeta, have success get table
+success to get META_Chunk, number:49, tmp:49, tree_index:49
+flush, size_:92439
+OpenByMeta, have success get filter_block, len:55167
+OpenByMeta, have success get index_block, len:37240, data.size:37240
+OpenByMeta, have success get table
+success to get META_Chunk, number:51, tmp:51, tree_index:51
+flush, size_:70628
+success to get META_Chunk, number:52, tmp:52, tree_index:52
+flush, size_:92434
+OpenByMeta, have success get filter_block, len:55167
+OpenByMeta, have success get index_block, len:37235, data.size:37235
+OpenByMeta, have success get table
+success to get META_Chunk, number:53, tmp:53, tree_index:53
+success to get META_Chunk, number:55, tmp:55, tree_index:55
+flush, size_:70607
+flush, size_:77343
+OpenByMeta, have success get filter_block, len:46234
+OpenByMeta, have success get index_block, len:31077, data.size:31077
+OpenByMeta, have success get table
+success to get META_Chunk, number:56, tmp:56, tree_index:56
+flush, size_:92210
+OpenByMeta, have success get filter_block, len:55071
+OpenByMeta, have success get index_block, len:37107, data.size:37107
+OpenByMeta, have success get table
+success to get META_Chunk, number:58, tmp:58, tree_index:58
+flush, size_:70628
+success to get META_Chunk, number:59, tmp:59, tree_index:59
+flush, size_:92334
+OpenByMeta, have success get filter_block, len:55117
+OpenByMeta, have success get index_block, len:37185, data.size:37185
+OpenByMeta, have success get table
+success to get META_Chunk, number:61, tmp:61, tree_index:61
+flush, size_:70626
+success to get META_Chunk, number:62, tmp:62, tree_index:62
+flush, size_:92439
+OpenByMeta, have success get filter_block, len:55167
+OpenByMeta, have success get index_block, len:37240, data.size:37240
+OpenByMeta, have success get table
+success to get META_Chunk, number:63, tmp:63, tree_index:63
+flush, size_:92437
+OpenByMeta, have success get filter_block, len:55167
+OpenByMeta, have success get index_block, len:37238, data.size:37238
+OpenByMeta, have success get table
+success to get META_Chunk, number:64, tmp:64, tree_index:64
+flush, size_:92436
+OpenByMeta, have success get filter_block, len:55167
+OpenByMeta, have success get index_block, len:37237, data.size:37237
+OpenByMeta, have success get table
+success to get META_Chunk, number:65, tmp:65, tree_index:65
+flush, size_:85299
+OpenByMeta, have success get filter_block, len:50952
+OpenByMeta, have success get index_block, len:34315, data.size:34315
+OpenByMeta, have success get table
+success to get META_Chunk, number:66, tmp:66, tree_index:66
+flush, size_:92437
+OpenByMeta, have success get filter_block, len:55167
+OpenByMeta, have success get index_block, len:37238, data.size:37238
+OpenByMeta, have success get table
+success to get META_Chunk, number:67, tmp:67, tree_index:67
+success to get META_Chunk, number:69, tmp:69, tree_index:69
+flush, size_:70625
+flush, size_:92530
+OpenByMeta, have success get filter_block, len:55213
+OpenByMeta, have success get index_block, len:37285, data.size:37285
+OpenByMeta, have success get table
+success to get META_Chunk, number:70, tmp:70, tree_index:70
+flush, size_:60528
+OpenByMeta, have success get filter_block, len:36228
+OpenByMeta, have success get index_block, len:24268, data.size:24268
+OpenByMeta, have success get table
+success to get META_Chunk, number:71, tmp:71, tree_index:71
+success to get META_Chunk, number:73, tmp:73, tree_index:73
+flush, size_:70630
+flush, size_:92529
+OpenByMeta, have success get filter_block, len:55213
+OpenByMeta, have success get index_block, len:37284, data.size:37284
+OpenByMeta, have success get table
+success to get META_Chunk, number:74, tmp:74, tree_index:74
+success to get META_Chunk, number:76, tmp:76, tree_index:76
+flush, size_:70614
+flush, size_:92431
+OpenByMeta, have success get filter_block, len:55167
+OpenByMeta, have success get index_block, len:37232, data.size:37232
+OpenByMeta, have success get table
+success to get META_Chunk, number:77, tmp:77, tree_index:77
+flush, size_:45855
+OpenByMeta, have success get filter_block, len:27528
+OpenByMeta, have success get index_block, len:18295, data.size:18295
+OpenByMeta, have success get table
+success to get META_Chunk, number:78, tmp:78, tree_index:78
+success to get META_Chunk, number:80, tmp:80, tree_index:80
+flush, size_:70658
+flush, size_:92531
+OpenByMeta, have success get filter_block, len:55213
+OpenByMeta, have success get index_block, len:37286, data.size:37286
+OpenByMeta, have success get table
+success to get META_Chunk, number:81, tmp:81, tree_index:81
+success to get META_Chunk, number:83, tmp:83, tree_index:83
+flush, size_:70628
+flush, size_:92529
+OpenByMeta, have success get filter_block, len:55213
+OpenByMeta, have success get index_block, len:37284, data.size:37284
+OpenByMeta, have success get table
+success to get META_Chunk, number:84, tmp:84, tree_index:84
+flush, size_:31214
+OpenByMeta, have success get filter_block, len:18720
+OpenByMeta, have success get index_block, len:12462, data.size:12462
+OpenByMeta, have success get table
+success to get META_Chunk, number:85, tmp:85, tree_index:85
+success to get META_Chunk, number:87, tmp:87, tree_index:87
+flush, size_:70625
+flush, size_:92434
+OpenByMeta, have success get filter_block, len:55163
+OpenByMeta, have success get index_block, len:37239, data.size:37239
+OpenByMeta, have success get table
+success to get META_Chunk, number:88, tmp:88, tree_index:88
+flush, size_:92436
+OpenByMeta, have success get filter_block, len:55163
+OpenByMeta, have success get index_block, len:37241, data.size:37241
+OpenByMeta, have success get table
+success to get META_Chunk, number:89, tmp:89, tree_index:89
+flush, size_:92312
+OpenByMeta, have success get filter_block, len:55121
+OpenByMeta, have success get index_block, len:37159, data.size:37159
+OpenByMeta, have success get table
+success to get META_Chunk, number:90, tmp:90, tree_index:90
+flush, size_:92325
+OpenByMeta, have success get filter_block, len:55121
+OpenByMeta, have success get index_block, len:37172, data.size:37172
+OpenByMeta, have success get table
+success to get META_Chunk, number:91, tmp:91, tree_index:91
+flush, size_:92529
+OpenByMeta, have success get filter_block, len:55213
+OpenByMeta, have success get index_block, len:37284, data.size:37284
+OpenByMeta, have success get table
+success to get META_Chunk, number:92, tmp:92, tree_index:92
+flush, size_:92530
+OpenByMeta, have success get filter_block, len:55213
+OpenByMeta, have success get index_block, len:37285, data.size:37285
+OpenByMeta, have success get table
+success to get META_Chunk, number:93, tmp:93, tree_index:93
+flush, size_:92437
+OpenByMeta, have success get filter_block, len:55163
+OpenByMeta, have success get index_block, len:37242, data.size:37242
+OpenByMeta, have success get table
+success to get META_Chunk, number:94, tmp:94, tree_index:94
+flush, size_:25097
+OpenByMeta, have success get filter_block, len:15040
+OpenByMeta, have success get index_block, len:10025, data.size:10025
+OpenByMeta, have success get table
+success to get META_Chunk, number:95, tmp:95, tree_index:95
+flush, size_:92528
+OpenByMeta, have success get filter_block, len:55209
+OpenByMeta, have success get index_block, len:37287, data.size:37287
+OpenByMeta, have success get table
+success to get META_Chunk, number:96, tmp:96, tree_index:96
+success to get META_Chunk, number:98, tmp:98, tree_index:98
+flush, size_:70616
+flush, size_:92410
+OpenByMeta, have success get filter_block, len:55167
+OpenByMeta, have success get index_block, len:37211, data.size:37211
+OpenByMeta, have success get table
+success to get META_Chunk, number:99, tmp:99, tree_index:99
+flush, size_:15323
+OpenByMeta, have success get filter_block, len:9187
+OpenByMeta, have success get index_block, len:6104, data.size:6104
+OpenByMeta, have success get table
+success to get META_Chunk, number:100, tmp:100, tree_index:100
+success to get META_Chunk, number:102, tmp:102, tree_index:102
+flush, size_:70623
+flush, size_:92528
+OpenByMeta, have success get filter_block, len:55209
+OpenByMeta, have success get index_block, len:37287, data.size:37287
+OpenByMeta, have success get table
+success to get META_Chunk, number:103, tmp:103, tree_index:103
+flush, size_:76778
+OpenByMeta, have success get filter_block, len:45860
+OpenByMeta, have success get index_block, len:30886, data.size:30886
+OpenByMeta, have success get table
+success to get META_Chunk, number:104, tmp:104, tree_index:104
+success to get META_Chunk, number:106, tmp:106, tree_index:106
+flush, size_:70620
+flush, size_:92528
+OpenByMeta, have success get filter_block, len:55209
+OpenByMeta, have success get index_block, len:37287, data.size:37287
+OpenByMeta, have success get table
+success to get META_Chunk, number:107, tmp:107, tree_index:107
+success to get META_Chunk, number:109, tmp:109, tree_index:109
+flush, size_:70622
+flush, size_:92527
+OpenByMeta, have success get filter_block, len:55209
+OpenByMeta, have success get index_block, len:37286, data.size:37286
+OpenByMeta, have success get table
+success to get META_Chunk, number:110, tmp:110, tree_index:110
+flush, size_:61646
+OpenByMeta, have success get filter_block, len:36870
+OpenByMeta, have success get index_block, len:24744, data.size:24744
+OpenByMeta, have success get table
+success to get META_Chunk, number:111, tmp:111, tree_index:111
+success to get META_Chunk, number:113, tmp:113, tree_index:113
+flush, size_:70622
+flush, size_:92528
+OpenByMeta, have success get filter_block, len:55209
+OpenByMeta, have success get index_block, len:37287, data.size:37287
+OpenByMeta, have success get table
+success to get META_Chunk, number:114, tmp:114, tree_index:114
+flush, size_:67855
+OpenByMeta, have success get filter_block, len:40563
+OpenByMeta, have success get index_block, len:27260, data.size:27260
+OpenByMeta, have success get table
+success to get META_Chunk, number:115, tmp:115, tree_index:115
+success to get META_Chunk, number:117, tmp:117, tree_index:117
+flush, size_:70630
+flush, size_:92324
+OpenByMeta, have success get filter_block, len:55117
+OpenByMeta, have success get index_block, len:37175, data.size:37175
+OpenByMeta, have success get table
+success to get META_Chunk, number:118, tmp:118, tree_index:118
+success to get META_Chunk, number:120, tmp:120, tree_index:120
+flush, size_:70625
+flush, size_:92531
+OpenByMeta, have success get filter_block, len:55213
+OpenByMeta, have success get index_block, len:37286, data.size:37286
+OpenByMeta, have success get table
+success to get META_Chunk, number:121, tmp:121, tree_index:121
+flush, size_:92438
+OpenByMeta, have success get filter_block, len:55163
+OpenByMeta, have success get index_block, len:37243, data.size:37243
+OpenByMeta, have success get table
+success to get META_Chunk, number:122, tmp:122, tree_index:122
+flush, size_:92439
+OpenByMeta, have success get filter_block, len:55163
+OpenByMeta, have success get index_block, len:37244, data.size:37244
+OpenByMeta, have success get table
+success to get META_Chunk, number:123, tmp:123, tree_index:123
+flush, size_:92437
+OpenByMeta, have success get filter_block, len:55163
+OpenByMeta, have success get index_block, len:37242, data.size:37242
+OpenByMeta, have success get table
+success to get META_Chunk, number:124, tmp:124, tree_index:124
+flush, size_:92319
+OpenByMeta, have success get filter_block, len:55121
+OpenByMeta, have success get index_block, len:37166, data.size:37166
+OpenByMeta, have success get table
+success to get META_Chunk, number:125, tmp:125, tree_index:125
+flush, size_:51584
+OpenByMeta, have success get filter_block, len:30926
+OpenByMeta, have success get index_block, len:20626, data.size:20626
+OpenByMeta, have success get table
+success to get META_Chunk, number:126, tmp:126, tree_index:126
+flush, size_:19410
+OpenByMeta, have success get filter_block, len:11636
+OpenByMeta, have success get index_block, len:7742, data.size:7742
+OpenByMeta, have success get table
+success to get META_Chunk, number:127, tmp:127, tree_index:127
+flush, size_:92528
+OpenByMeta, have success get filter_block, len:55209
+OpenByMeta, have success get index_block, len:37287, data.size:37287
+OpenByMeta, have success get table
+success to get META_Chunk, number:128, tmp:128, tree_index:128
+success to get META_Chunk, number:130, tmp:130, tree_index:130
+flush, size_:70625
+flush, size_:92528
+OpenByMeta, have success get filter_block, len:55209
+OpenByMeta, have success get index_block, len:37287, data.size:37287
+OpenByMeta, have success get table
+success to get META_Chunk, number:131, tmp:131, tree_index:131
+flush, size_:92524
+OpenByMeta, have success get filter_block, len:55213
+OpenByMeta, have success get index_block, len:37279, data.size:37279
+OpenByMeta, have success get table
+success to get META_Chunk, number:133, tmp:133, tree_index:133
+flush, size_:70632
+success to get META_Chunk, number:134, tmp:134, tree_index:134
+flush, size_:32142
+OpenByMeta, have success get filter_block, len:19279
+OpenByMeta, have success get index_block, len:12831, data.size:12831
+OpenByMeta, have success get table
+success to get META_Chunk, number:135, tmp:135, tree_index:135
+flush, size_:92528
+OpenByMeta, have success get filter_block, len:55209
+OpenByMeta, have success get index_block, len:37287, data.size:37287
+OpenByMeta, have success get table
+success to get META_Chunk, number:137, tmp:137, tree_index:137
+flush, size_:70632
+success to get META_Chunk, number:138, tmp:138, tree_index:138
