@@ -407,6 +407,20 @@ Status Version::Get(const ReadOptions& options,
       saver.value = value;
       s = vset_->table_cache_->Get(options, f->number, f->file_size,
                                    ikey, &saver, SaveValue);
+
+      /////////////meggie
+      /*
+      std::string* valuebymeta;
+      Saver saverbymeta;
+      saverbymeta.state = kNotFound;
+      saverbymeta.ucmp = ucmp;
+      saverbymeta.user_key = user_key;
+      saverbymeta.value = valuebymeta;
+      vset_->table_cache_->GetByMeta(options, f->number, meta_, 
+                               ikey, &saverbymeta, SaveValue);
+      assert(*(saverbymeta.value) == *(saver.value));*/
+      /////////////meggie
+
       if (!s.ok()) {
         return s;
       }

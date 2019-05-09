@@ -1,15 +1,13 @@
-delete nvm file 000001.met
-delete nvm file ..
-delete nvm file .
+nvm GetChildren failed
 to create META,meta_size:2147483648
 -----------------META SETUP---------------
 create nvm_file:/mnt/pmemdir/dbbench/000001.met
 success to setup bplustree
 chunk_amount:96240, remaining_amount:96240
 ------------END META SETUP-----------
-delete nvm file 000001.met
-delete nvm file ..
 delete nvm file .
+delete nvm file ..
+delete nvm file 000001.met
 to create META,meta_size:2147483648
 -----------------META SETUP---------------
 create nvm_file:/mnt/pmemdir/dbbench/000001.met
@@ -62,30 +60,30 @@ index_block len:37069
 finally, sstable meta len:92149
 flush, size_:92173
 success to get META_Chunk, number:20, tmp:20, tree_index:20
+filter_block len:55080
+index_block len:37070
+finally, sstable meta len:92150
+flush, size_:92174
 success to get META_Chunk, number:22, tmp:22, tree_index:22
 filter_block len:42403
 index_block len:28167
 finally, sstable meta len:70570
 flush, size_:70594
-filter_block len:55080
-index_block len:37070
-finally, sstable meta len:92150
-flush, size_:92174
 success to get META_Chunk, number:23, tmp:23, tree_index:23
 filter_block len:32536
 index_block len:21690
 finally, sstable meta len:54226
 flush, size_:54250
 success to get META_Chunk, number:24, tmp:24, tree_index:24
+filter_block len:55076
+index_block len:37116
+finally, sstable meta len:92192
+flush, size_:92216
 success to get META_Chunk, number:26, tmp:26, tree_index:26
 filter_block len:42403
 index_block len:28210
 finally, sstable meta len:70613
 flush, size_:70637
-filter_block len:55076
-index_block len:37116
-finally, sstable meta len:92192
-flush, size_:92216
 success to get META_Chunk, number:27, tmp:27, tree_index:27
 filter_block len:55076
 index_block len:37107
@@ -106,16 +104,16 @@ filter_block len:55076
 index_block len:37101
 finally, sstable meta len:92177
 flush, size_:92201
-success to get META_Chunk, number:33, tmp:33, tree_index:33
-filter_block len:42403
-index_block len:28205
-finally, sstable meta len:70608
-flush, size_:70632
-success to get META_Chunk, number:34, tmp:34, tree_index:34
+success to get META_Chunk, number:32, tmp:32, tree_index:32
 filter_block len:13639
 index_block len:9074
 finally, sstable meta len:22713
 flush, size_:22737
+success to get META_Chunk, number:34, tmp:34, tree_index:34
+filter_block len:42403
+index_block len:28205
+finally, sstable meta len:70608
+flush, size_:70632
 success to get META_Chunk, number:35, tmp:35, tree_index:35
 filter_block len:55080
 index_block len:37083
@@ -252,15 +250,15 @@ index_block len:37291
 finally, sstable meta len:92509
 flush, size_:92533
 success to get META_Chunk, number:71, tmp:71, tree_index:71
-filter_block len:55168
-index_block len:37254
-finally, sstable meta len:92422
-flush, size_:92446
 success to get META_Chunk, number:73, tmp:73, tree_index:73
 filter_block len:42407
 index_block len:28201
 finally, sstable meta len:70608
 flush, size_:70632
+filter_block len:55168
+index_block len:37254
+finally, sstable meta len:92422
+flush, size_:92446
 success to get META_Chunk, number:74, tmp:74, tree_index:74
 filter_block len:28621
 index_block len:19042
@@ -271,12 +269,12 @@ filter_block len:55218
 index_block len:37291
 finally, sstable meta len:92509
 flush, size_:92533
-success to get META_Chunk, number:76, tmp:76, tree_index:76
-success to get META_Chunk, number:78, tmp:78, tree_index:78
+success to get META_Chunk, number:77, tmp:77, tree_index:77
 filter_block len:42403
 index_block len:28189
 finally, sstable meta len:70592
 flush, size_:70616
+success to get META_Chunk, number:78, tmp:78, tree_index:78
 filter_block len:55218
 index_block len:37289
 finally, sstable meta len:92507
@@ -371,12 +369,12 @@ filter_block len:55214
 index_block len:37292
 finally, sstable meta len:92506
 flush, size_:92530
-success to get META_Chunk, number:102, tmp:102, tree_index:102
+success to get META_Chunk, number:101, tmp:101, tree_index:101
+success to get META_Chunk, number:103, tmp:103, tree_index:103
 filter_block len:42407
 index_block len:28194
 finally, sstable meta len:70601
 flush, size_:70625
-success to get META_Chunk, number:103, tmp:103, tree_index:103
 filter_block len:55214
 index_block len:37292
 finally, sstable meta len:92506
@@ -426,12 +424,12 @@ filter_block len:55172
 index_block len:37248
 finally, sstable meta len:92420
 flush, size_:92444
-success to get META_Chunk, number:117, tmp:117, tree_index:117
+success to get META_Chunk, number:116, tmp:116, tree_index:116
+success to get META_Chunk, number:118, tmp:118, tree_index:118
 filter_block len:42403
 index_block len:28205
 finally, sstable meta len:70608
 flush, size_:70632
-success to get META_Chunk, number:118, tmp:118, tree_index:118
 filter_block len:55172
 index_block len:37244
 finally, sstable meta len:92416
@@ -477,15 +475,15 @@ index_block len:37287
 finally, sstable meta len:92505
 flush, size_:92529
 success to get META_Chunk, number:128, tmp:128, tree_index:128
+filter_block len:20160
+index_block len:13410
+finally, sstable meta len:33570
+flush, size_:33594
 success to get META_Chunk, number:130, tmp:130, tree_index:130
 filter_block len:42403
 index_block len:28200
 finally, sstable meta len:70603
 flush, size_:70627
-filter_block len:20160
-index_block len:13410
-finally, sstable meta len:33570
-flush, size_:33594
 success to get META_Chunk, number:131, tmp:131, tree_index:131
 filter_block len:55214
 index_block len:37292
@@ -506,17 +504,17 @@ filter_block len:55218
 index_block len:37288
 finally, sstable meta len:92506
 flush, size_:92530
-success to get META_Chunk, number:137, tmp:137, tree_index:137
-filter_block len:42403
-index_block len:28207
-finally, sstable meta len:70610
-flush, size_:70634
-success to get META_Chunk, number:138, tmp:138, tree_index:138
+success to get META_Chunk, number:136, tmp:136, tree_index:136
 filter_block len:5351
 index_block len:3553
 finally, sstable meta len:8904
 flush, size_:8928
+success to get META_Chunk, number:137, tmp:137, tree_index:137
 success to get META_Chunk, number:139, tmp:139, tree_index:139
+filter_block len:42403
+index_block len:28207
+finally, sstable meta len:70610
+flush, size_:70634
 filter_lens:
  3209 5351 7239 11907 13639 17458 20012 20160 28621 32285 32536 37412 40462 40776 42040 42403 42407 42757 46239 55076 55080 55122 55126 55168 55172 55214 55218
 index_lens:
