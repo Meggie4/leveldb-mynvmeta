@@ -286,8 +286,10 @@ CMakeFiles/leveldb.dir/db/repair.cc.o: ../include/leveldb/write_batch.h
 CMakeFiles/leveldb.dir/db/repair.cc.o: ../db/repair.cc
 CMakeFiles/leveldb.dir/db/repair.cc.o: include/port/port_config.h
 
+CMakeFiles/leveldb.dir/db/table_cache.cc.o: ../bplustree/lib/bplustree.h
 CMakeFiles/leveldb.dir/db/table_cache.cc.o: ../db/dbformat.h
 CMakeFiles/leveldb.dir/db/table_cache.cc.o: ../db/filename.h
+CMakeFiles/leveldb.dir/db/table_cache.cc.o: ../db/meta.h
 CMakeFiles/leveldb.dir/db/table_cache.cc.o: ../db/table_cache.h
 CMakeFiles/leveldb.dir/db/table_cache.cc.o: ../port/atomic_pointer.h
 CMakeFiles/leveldb.dir/db/table_cache.cc.o: ../port/port.h
@@ -483,6 +485,8 @@ CMakeFiles/leveldb.dir/table/merger.cc.o: ../include/leveldb/slice.h
 CMakeFiles/leveldb.dir/table/merger.cc.o: ../include/leveldb/status.h
 CMakeFiles/leveldb.dir/table/merger.cc.o: ../table/merger.cc
 
+CMakeFiles/leveldb.dir/table/table.cc.o: ../bplustree/lib/bplustree.h
+CMakeFiles/leveldb.dir/table/table.cc.o: ../db/meta.h
 CMakeFiles/leveldb.dir/table/table.cc.o: ../port/atomic_pointer.h
 CMakeFiles/leveldb.dir/table/table.cc.o: ../port/port.h
 CMakeFiles/leveldb.dir/table/table.cc.o: ../port/port_stdcxx.h

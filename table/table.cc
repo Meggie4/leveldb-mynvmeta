@@ -15,6 +15,10 @@
 #include "table/two_level_iterator.h"
 #include "util/coding.h"
 
+//////////////meggie
+#include "db/meta.h"
+//////////////meggie
+
 namespace leveldb {
 
 struct Table::Rep {
@@ -78,13 +82,16 @@ Status Table::Open(const Options& options,
     rep->filter = nullptr;
     *table = new Table(rep);
     (*table)->ReadMeta(footer);
+    /////////////meggie
+    (*table)->SetMChunk(nullptr);
+    /////////////meggie
   }
 
   return s;
 }
 
 ///////////////meggie
-Status Table::OpenByMeta(const Options& Options,
+Status Table::OpenByMeta(const Options& options,
                         RandomAccessFile* file,
                         META_Chunk* mchunk,
                         Table** table) { 
@@ -110,12 +117,14 @@ Status Table::OpenByMeta(const Options& Options,
     Rep* rep = new Table::Rep;
     rep->options = options;
     rep->file = file;
+    ///rep->metaindex_handle = footer.metaindex_handle();
     rep->index_block = index_block;
     rep->cache_id = (options.block_cache ? mchunk->get_index() : 0);
     rep->filter_data = nullptr; 
-    rep_->filter = new FilterBlockReader(rep_->options.filter_policy, filter_data);
+    rep->filter = new FilterBlockReader(rep->options.filter_policy, filter_data);
     *table = new Table(rep);
-    return s;
+    (*table)->SetMChunk(mchunk);
+    return Status::OK();
 }
 
 ///////////////meggie
@@ -174,6 +183,10 @@ void Table::ReadFilter(const Slice& filter_handle_value) {
 
 Table::~Table() {
   delete rep_;
+  ////////////meggie
+  if(mchunk_ != nullptr)
+    delete mchunk_;
+  ////////////meggie
 }
 
 static void DeleteBlock(void* arg, void* ignored) {

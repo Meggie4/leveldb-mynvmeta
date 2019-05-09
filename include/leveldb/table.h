@@ -18,6 +18,9 @@ struct Options;
 class RandomAccessFile;
 struct ReadOptions;
 class TableCache;
+//////////////meggie
+class META_Chunk;
+//////////////meggie
 
 // A Table is a sorted map from strings to strings.  Tables are
 // immutable and persistent.  A Table may be safely accessed from
@@ -44,8 +47,8 @@ class LEVELDB_EXPORT Table {
 
   //////////////meggie
   static Status OpenByMeta(const Options& Options,
-                        uint64_t file_number,
-                        uint64_t file_size,
+                        RandomAccessFile* file,
+                        META_Chunk* mchunk,
                         Table** table);
   //////////////meggie
 
@@ -70,6 +73,10 @@ class LEVELDB_EXPORT Table {
  private:
   struct Rep;
   Rep* rep_;
+  //////////////meggie
+  META_Chunk* mchunk_;
+  void SetMChunk(META_Chunk* mchunk) {mchunk_ = mchunk;}
+  //////////////meggie
 
   explicit Table(Rep* rep) { rep_ = rep; }
   static Iterator* BlockReader(void*, const ReadOptions&, const Slice&);

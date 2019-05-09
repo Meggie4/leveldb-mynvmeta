@@ -287,8 +287,10 @@ CMakeFiles/leveldb.dir/db/repair.cc.o
  /home/meggie/文档/leveldb-mynvmeta/db/repair.cc
  include/port/port_config.h
 CMakeFiles/leveldb.dir/db/table_cache.cc.o
+ ..//bplustree/lib/bplustree.h
  ..//db/dbformat.h
  ..//db/filename.h
+ ..//db/meta.h
  ..//db/table_cache.h
  ..//port/atomic_pointer.h
  ..//port/port.h
@@ -484,6 +486,8 @@ CMakeFiles/leveldb.dir/table/merger.cc.o
  ../include/leveldb/status.h
  /home/meggie/文档/leveldb-mynvmeta/table/merger.cc
 CMakeFiles/leveldb.dir/table/table.cc.o
+ ..//bplustree/lib/bplustree.h
+ ..//db/meta.h
  ..//port/atomic_pointer.h
  ..//port/port.h
  ..//port/port_stdcxx.h

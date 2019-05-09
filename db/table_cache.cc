@@ -9,6 +9,10 @@
 #include "leveldb/table.h"
 #include "util/coding.h"
 
+///////////meggie
+#include "db/meta.h"
+///////////meggie
+
 namespace leveldb {
 
 struct TableAndFile {
@@ -123,5 +127,88 @@ void TableCache::Evict(uint64_t file_number) {
   EncodeFixed64(buf, file_number);
   cache_->Erase(Slice(buf, sizeof(buf)));
 }
+
+/////////////////meggie 
+static void DeleteTable(void* arg1, void* arg2) {
+  Table* table = reinterpret_cast<Table*>(arg1);
+  delete table;
+}
+
+void TableCache::EvictByMeta(META* meta,
+                    uint64_t file_number) {
+    meta->evict_chunk(file_number);
+}
+
+Status TableCache::GetByMeta(const ReadOptions& options, 
+                    uint64_t file_number,
+                    META* meta,
+                    const Slice& k,
+                    void* arg,
+                    void (*saver)(void*, const Slice&, const Slice&)) {
+    std::string fname  = TableFileName(dbname_, file_number);
+    RandomAccessFile* file = nullptr;
+    Table* table = nullptr;
+    Status s;
+    s = env_->NewRandomAccessFile(fname, &file);
+    
+    if (!s.ok()) {
+      std::string old_fname = SSTTableFileName(dbname_, file_number);
+      if (env_->NewRandomAccessFile(old_fname, &file).ok()) {
+        s = Status::OK();
+      }
+    }
+
+    if (s.ok()) {
+      META_Chunk* mchunk = meta->alloc_chunk(file_number);
+      s = Table::OpenByMeta(options_, file, mchunk, &table);
+    }
+
+    if(s.ok()) {
+        s = table->InternalGet(options, k, arg, saver);
+    }
+    
+    delete table;
+    
+    return s;
+}
+  
+Iterator* TableCache::NewIteratorByMeta(const ReadOptions& options,
+                                  uint64_t file_number,
+                                  META* meta,
+                                  Table** tableptr) {
+    if(tableptr != nullptr) {
+        *tableptr = nullptr;
+    }
+    Status s;
+    std::string fname  = TableFileName(dbname_, file_number);
+    RandomAccessFile* file = nullptr;
+    Table* table = nullptr;
+    s = env_->NewRandomAccessFile(fname, &file);
+    
+    if (!s.ok()) {
+      std::string old_fname = SSTTableFileName(dbname_, file_number);
+      if (env_->NewRandomAccessFile(old_fname, &file).ok()) {
+        s = Status::OK();
+      }
+    }
+
+    if (s.ok()) {
+      META_Chunk* mchunk = meta->alloc_chunk(file_number);
+      s = Table::OpenByMeta(options_, file, mchunk, &table);
+    }
+
+    if(!s.ok()) {
+        return NewErrorIterator(s);
+    }
+
+    Iterator* result = table->NewIterator(options);
+    result->RegisterCleanup(&DeleteTable, table, nullptr);
+
+    if(tableptr != nullptr)
+        *tableptr = table;
+    
+    return result;
+}
+////////////////meggie
 
 }  // namespace leveldb

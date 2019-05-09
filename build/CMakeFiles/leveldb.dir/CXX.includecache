@@ -759,6 +759,8 @@ stdio.h
 -
 stdlib.h
 -
+assert.h
+-
 db/meta.h
 /home/meggie/文档/leveldb-mynvmeta/db/db/meta.h
 port/cache_flush.h
@@ -807,6 +809,8 @@ leveldb/table.h
 /home/meggie/文档/leveldb-mynvmeta/db/leveldb/table.h
 util/coding.h
 /home/meggie/文档/leveldb-mynvmeta/db/util/coding.h
+db/meta.h
+/home/meggie/文档/leveldb-mynvmeta/db/db/meta.h
 
 /home/meggie/文档/leveldb-mynvmeta/db/version_edit.cc
 db/version_edit.h
@@ -973,6 +977,8 @@ table/two_level_iterator.h
 /home/meggie/文档/leveldb-mynvmeta/table/table/two_level_iterator.h
 util/coding.h
 /home/meggie/文档/leveldb-mynvmeta/table/util/coding.h
+db/meta.h
+/home/meggie/文档/leveldb-mynvmeta/table/db/meta.h
 
 /home/meggie/文档/leveldb-mynvmeta/table/table_builder.cc
 leveldb/table_builder.h

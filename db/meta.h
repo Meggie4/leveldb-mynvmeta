@@ -65,6 +65,7 @@ namespace leveldb {
             bool reserve_chunk(uint64_t number);
             META_Chunk* alloc_chunk(uint64_t number);
             bool reserve_and_alloc_chunk(uint64_t number, META_Chunk** mchunk);
+            void evict_chunk(uint64_t number);
             inline uint64_t get_chunk_index(uint64_t number);
             inline void update_chunk_index(uint64_t number, uint64_t index);
         public:

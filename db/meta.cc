@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #include "db/meta.h"
 #include "port/cache_flush.h"
@@ -12,7 +13,7 @@ struct bplus_tree_config{
 };
 
 namespace leveldb{
-    META_Chunk::META_Chunk(uint64_t number, char* addr)
+    META_Chunk::META_Chunk(uint64_t number, uint64_t index, char* addr)
     : number_(number),
       index_(index),
       addr_(addr),
@@ -209,8 +210,14 @@ namespace leveldb{
 
     META_Chunk* META::alloc_chunk(uint64_t number) {
         uint64_t chunk_index = get_chunk_index(number);
-        char* phy_addr = mmap_start_ + chunk_offset_ + chunk_index * CHUNK_SIZE; 
+        assert(OnlineMap_[chunk_index] == 1);
         
+        char* phy_addr = mmap_start_ + chunk_offset_ + chunk_index * CHUNK_SIZE; 
         META_Chunk* mchunk = new META_Chunk(number, chunk_index, phy_addr);
+    }
+
+    void META::evict_chunk(uint64_t number) {
+        uint64_t chunk_index = get_chunk_index(number);
+        OnlineMap_[chunk_index] = 0;
     }
 }
