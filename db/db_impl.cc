@@ -293,8 +293,8 @@ void DBImpl::DeleteObsoleteFiles() {
 
       if (!keep) {
         if (type == kTableFile) {
-          table_cache_->Evict(number);
           /////////meggie
+          //table_cache_->Evict(number);
           meta_->evict_chunk(number);
           /////////meggie
         }
@@ -1215,7 +1215,7 @@ Status DBImpl::Get(const ReadOptions& options,
     } else if (imm != nullptr && imm->Get(lkey, value, &s)) {
       // Done
     } else {
-      s = current->Get(options, lkey, value, &stats, meta_);
+      s = current->Get(options, lkey, value, &stats);
       have_stat_update = true;
     }
     mutex_.Lock();
@@ -1603,6 +1603,7 @@ Status DB::Open(const Options& options, const std::string& dbname,
       std::string meta_name = MetaFileName(dbname_nvm, meta_number);
       //DEBUG_T("to create META,meta_size:%llu\n", meta_size);
       impl->meta_ = new META(meta_name, meta_size, false);
+      impl->versions_->set_meta(impl->meta_);
   }
   ////////////meggie
 

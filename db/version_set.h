@@ -72,10 +72,9 @@ class Version {
     FileMetaData* seek_file;
     int seek_file_level;
   };
-  ////////////////meggie
+  
   Status Get(const ReadOptions&, const LookupKey& key, std::string* val,
-             GetStats* stats, META* meta = nullptr);
-  ////////////////meggie
+             GetStats* stats);
 
   // Adds "stats" into the current state.  Returns true if a new
   // compaction may need to be triggered, false otherwise.
@@ -116,7 +115,7 @@ class Version {
 
   // Return a human readable string that describes this version's contents.
   std::string DebugString() const;
-
+  
  private:
   friend class Compaction;
   friend class VersionSet;
@@ -138,6 +137,10 @@ class Version {
   Version* prev_;               // Previous version in linked list
   int refs_;                    // Number of live refs to this version
 
+  //////////////meggie
+  META* meta_;
+  //////////////meggie
+  
   // List of files per level
   std::vector<FileMetaData*> files_[config::kNumLevels];
 
@@ -150,14 +153,24 @@ class Version {
   // are initialized by Finalize().
   double compaction_score_;
   int compaction_level_;
-
-  explicit Version(VersionSet* vset)
+ 
+  //////////meggie
+  //explicit Version(VersionSet* vset)
+  //    : vset_(vset), next_(this), prev_(this), refs_(0),
+  //      file_to_compact_(nullptr),
+  //      file_to_compact_level_(-1),
+  //      compaction_score_(-1),
+  //      compaction_level_(-1) {
+  //}
+  Version(VersionSet* vset, META* meta = nullptr)
       : vset_(vset), next_(this), prev_(this), refs_(0),
         file_to_compact_(nullptr),
         file_to_compact_level_(-1),
         compaction_score_(-1),
+        meta_(meta),
         compaction_level_(-1) {
   }
+  //////////meggie
 
   ~Version();
 
@@ -271,6 +284,13 @@ class VersionSet {
     char buffer[100];
   };
   const char* LevelSummary(LevelSummaryStorage* scratch) const;
+    
+  ///////////meggie
+  void set_meta(META* meta) {
+      meta_ = meta;
+  }
+  ///////////meggie
+
 
  private:
   class Builder;
@@ -315,6 +335,10 @@ class VersionSet {
   Version dummy_versions_;  // Head of circular doubly-linked list of versions.
   Version* current_;        // == dummy_versions_.prev_
 
+  //////////////meggie
+  META* meta_;
+  //////////////meggie
+  
   // Per-level key at which the next compaction at that level should start.
   // Either an empty string, or a valid InternalKey.
   std::string compact_pointer_[config::kNumLevels];

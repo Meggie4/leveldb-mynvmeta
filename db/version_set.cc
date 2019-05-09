@@ -24,6 +24,12 @@
 //////////////meggie
 
 namespace leveldb {
+//////////////meggie
+struct FileIteratorArgs {
+    TableCache* table_cache;
+    META* meta;
+};
+//////////////meggie
 
 static size_t TargetFileSize(const Options* options) {
   return options->max_file_size;
@@ -218,22 +224,41 @@ class Version::LevelFileNumIterator : public Iterator {
 static Iterator* GetFileIterator(void* arg,
                                  const ReadOptions& options,
                                  const Slice& file_value) {
-  TableCache* cache = reinterpret_cast<TableCache*>(arg);
+  /////////////meggie
+  //TableCache* cache = reinterpret_cast<TableCache*>(arg);
+  FileIteratorArgs* fiargs = reinterpret_cast<FileIteratorArgs*>(arg);
+  TableCache* cache = fiargs->table_cache;
+  META* meta = fiargs->meta;
+  /////////////meggie
   if (file_value.size() != 16) {
     return NewErrorIterator(
         Status::Corruption("FileReader invoked with unexpected value"));
   } else {
-    return cache->NewIterator(options,
-                              DecodeFixed64(file_value.data()),
-                              DecodeFixed64(file_value.data() + 8));
+    ////////meggie
+    //return cache->NewIterator(options,
+    //                         DecodeFixed64(file_value.data()),
+    //                         DecodeFixed64(file_value.data() + 8));
+    return cache->NewIteratorByMeta(options,
+                             DecodeFixed64(file_value.data()),
+                             DecodeFixed64(file_value.data() + 8),
+                             meta);
+    ////////meggie
   }
 }
 
 Iterator* Version::NewConcatenatingIterator(const ReadOptions& options,
                                             int level) const {
+  ///////////////meggie
+  //return NewTwoLevelIterator(
+  //    new LevelFileNumIterator(vset_->icmp_, &files_[level]),
+  //    &GetFileIterator, vset_->table_cache_, options);
+  FileIteratorArgs* fiargs = new FileIteratorArgs();
+  fiargs->table_cache = vset_->table_cache_;
+  fiargs->meta = meta_;
   return NewTwoLevelIterator(
       new LevelFileNumIterator(vset_->icmp_, &files_[level]),
-      &GetFileIterator, vset_->table_cache_, options);
+      &GetFileIterator, fiargs, options);
+  ///////////////meggie
 }
 
 void Version::AddIterators(const ReadOptions& options,
@@ -241,8 +266,15 @@ void Version::AddIterators(const ReadOptions& options,
   // Merge all level zero files together since they may overlap
   for (size_t i = 0; i < files_[0].size(); i++) {
     iters->push_back(
-        vset_->table_cache_->NewIterator(
-            options, files_[0][i]->number, files_[0][i]->file_size));
+        ////////meggie
+        //vset_->table_cache_->NewIterator(
+          //  options, files_[0][i]->number, files_[0][i]->file_size)
+            vset_->table_cache_->NewIteratorByMeta(
+                options, files_[0][i]->number, 
+                files_[0][i]->file_size, meta_) 
+        ////////meggie
+          );
+  
   }
 
   // For levels > 0, we can use a concatenating iterator that sequentially
@@ -337,11 +369,7 @@ void Version::ForEachOverlapping(Slice user_key, Slice internal_key,
 Status Version::Get(const ReadOptions& options,
                     const LookupKey& k,
                     std::string* value,
-                    GetStats* stats,
-                    ///////////meggie
-                    META* meta
-                    ///////////meggie
-                    ) {
+                    GetStats* stats) {
   Slice ikey = k.internal_key();
   Slice user_key = k.user_key();
   const Comparator* ucmp = vset_->icmp_.user_comparator();
@@ -409,22 +437,28 @@ Status Version::Get(const ReadOptions& options,
       last_file_read = f;
       last_file_read_level = level;
 
+      /////////////meggie
+      //Saver saver;
+      //saver.state = kNotFound;
+      //saver.ucmp = ucmp;
+      //saver.user_key = user_key;
+      //saver.value = value;
+      //s = vset_->table_cache_->Get(options, f->number, f->file_size,
+      //                             ikey, &saver, SaveValue);
+
+      //std::string valuebymeta;
+      //Saver saverbymeta;
+      //saverbymeta.state = kNotFound;
+      //saverbymeta.ucmp = ucmp;
+      //saverbymeta.user_key = user_key;
+      //saverbymeta.value = &valuebymeta;
+      //Status smeta =vset_->table_cache_->GetByMeta(options, f->number, f->file_size, meta, ikey, &saverbymeta, SaveValue);
       Saver saver;
       saver.state = kNotFound;
       saver.ucmp = ucmp;
       saver.user_key = user_key;
       saver.value = value;
-      s = vset_->table_cache_->Get(options, f->number, f->file_size,
-                                   ikey, &saver, SaveValue);
-
-      /////////////meggie
-      std::string valuebymeta;
-      Saver saverbymeta;
-      saverbymeta.state = kNotFound;
-      saverbymeta.ucmp = ucmp;
-      saverbymeta.user_key = user_key;
-      saverbymeta.value = &valuebymeta;
-      Status smeta =vset_->table_cache_->GetByMeta(options, f->number, f->file_size, meta, ikey, &saverbymeta, SaveValue);
+      s = vset_->table_cache_->GetByMeta(options, f->number, f->file_size, meta_, ikey, &saver, SaveValue);
       /////////////meggie
 
       if (!s.ok()) {
@@ -437,7 +471,7 @@ Status Version::Get(const ReadOptions& options,
           ////////meggie
           //DEBUG_T("found, saver.value:%s, saverbymeta.value:%s\n",
             //      (*value).c_str(), valuebymeta.c_str());
-          assert(*(saverbymeta.value) == *(saver.value));
+          //assert(*(saverbymeta.value) == *(saver.value));
           ////////meggie
           return s;
         case kDeleted:
@@ -816,7 +850,10 @@ VersionSet::VersionSet(const std::string& dbname,
       descriptor_log_(nullptr),
       dummy_versions_(this),
       current_(nullptr) {
-  AppendVersion(new Version(this));
+  /////////////meggie
+  //AppendVersion(new Version(this));
+  AppendVersion(new Version(this, meta_));
+  /////////////meggie
 }
 
 VersionSet::~VersionSet() {
@@ -857,8 +894,12 @@ Status VersionSet::LogAndApply(VersionEdit* edit, port::Mutex* mu) {
 
   edit->SetNextFile(next_file_number_);
   edit->SetLastSequence(last_sequence_);
-
-  Version* v = new Version(this);
+ 
+  //////////////meggie
+  //Version* v = new Version(this);
+  Version* v = new Version(this, meta_);
+  //////////////meggie
+  
   {
     Builder builder(this, current_);
     builder.Apply(edit);
@@ -1032,7 +1073,10 @@ Status VersionSet::Recover(bool *save_manifest) {
   }
 
   if (s.ok()) {
-    Version* v = new Version(this);
+    /////////////meggie
+    //Version* v = new Version(this);
+    Version* v = new Version(this, meta_);
+    /////////////meggie
     builder.SaveTo(v);
     // Install recovered version
     Finalize(v);
@@ -1200,8 +1244,12 @@ uint64_t VersionSet::ApproximateOffsetOf(Version* v, const InternalKey& ikey) {
         // "ikey" falls in the range for this table.  Add the
         // approximate offset of "ikey" within the table.
         Table* tableptr;
-        Iterator* iter = table_cache_->NewIterator(
-            ReadOptions(), files[i]->number, files[i]->file_size, &tableptr);
+        //////////meggie
+        //Iterator* iter = table_cache_->NewIterator(
+        //    ReadOptions(), files[i]->number, files[i]->file_size, &tableptr);
+        Iterator* iter = table_cache_->NewIteratorByMeta(
+            ReadOptions(), files[i]->number, files[i]->file_size, meta_, &tableptr);
+        //////////meggie
         if (tableptr != nullptr) {
           result += tableptr->ApproximateOffsetOf(ikey.Encode());
         }
@@ -1301,14 +1349,27 @@ Iterator* VersionSet::MakeInputIterator(Compaction* c) {
       if (c->level() + which == 0) {
         const std::vector<FileMetaData*>& files = c->inputs_[which];
         for (size_t i = 0; i < files.size(); i++) {
-          list[num++] = table_cache_->NewIterator(
-              options, files[i]->number, files[i]->file_size);
+           //////////////meggie
+           //list[num++] = table_cache_->NewIterator(
+           //   options, files[i]->number, files[i]->file_size);
+           list[num++] = table_cache_->NewIteratorByMeta(
+              options, files[i]->number, files[i]->file_size, 
+              meta_);
+           //////////////meggie
         }
       } else {
         // Create concatenating iterator for the files from this level
+        ////////////meggie
+        //list[num++] = NewTwoLevelIterator(
+        //    new Version::LevelFileNumIterator(icmp_, &c->inputs_[which]),
+        //    &GetFileIterator, table_cache_, options);
+        FileIteratorArgs* fiargs = new FileIteratorArgs();
+        fiargs->table_cache = table_cache_;
+        fiargs->meta = meta_;
         list[num++] = NewTwoLevelIterator(
             new Version::LevelFileNumIterator(icmp_, &c->inputs_[which]),
-            &GetFileIterator, table_cache_, options);
+            &GetFileIterator, fiargs, options);
+        ////////////meggie
       }
     }
   }
