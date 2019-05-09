@@ -12,6 +12,10 @@
 #include "leveldb/env.h"
 #include "leveldb/iterator.h"
 
+//////////////meggie
+#include "db/meta.h"
+//////////////meggie
+
 namespace leveldb {
 
 Status BuildTable(const std::string& dbname,
@@ -21,7 +25,7 @@ Status BuildTable(const std::string& dbname,
                   Iterator* iter,
                   FileMetaData* meta,
                   ////////////meggie
-                  META_Chunk* mchunk
+                  META* nvmmeta  
                   ////////////meggie
                   ) {
   Status s;
@@ -37,6 +41,10 @@ Status BuildTable(const std::string& dbname,
     }
 
     ////////////meggie
+    META_Chunk* mchunk = nullptr;
+    if(nvmmeta){
+        nvmmeta->reserve_and_alloc_chunk(meta->number, &mchunk);
+    }
     TableBuilder* builder = new TableBuilder(options, 
             file, mchunk);
     ////////////meggie
@@ -67,9 +75,15 @@ Status BuildTable(const std::string& dbname,
 
     if (s.ok()) {
       // Verify that the table is usable
-      Iterator* it = table_cache->NewIterator(ReadOptions(),
+      ////////////meggie
+      //Iterator* it = table_cache->NewIterator(ReadOptions(),
+      //                                        meta->number,
+      //                                        meta->file_size);
+      Iterator* it = table_cache->NewIteratorByMeta(ReadOptions(),
                                               meta->number,
-                                              meta->file_size);
+                                              meta->file_size,
+                                              nvmmeta);
+      ////////////meggie
       s = it->status();
       delete it;
     }

@@ -244,6 +244,9 @@ static Iterator* GetFileIterator(void* arg,
                              meta);
     ////////meggie
   }
+  //////////meggie
+  delete fiargs; 
+  //////////meggie
 }
 
 Iterator* Version::NewConcatenatingIterator(const ReadOptions& options,

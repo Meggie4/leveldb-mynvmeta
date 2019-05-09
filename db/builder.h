@@ -16,7 +16,9 @@ class Env;
 class Iterator;
 class TableCache;
 class VersionEdit;
-class META_Chunk;
+////////////meggie
+class META;
+////////////meggie
 
 // Build a Table file from the contents of *iter.  The generated file
 // will be named according to meta->number.  On success, the rest of
@@ -30,7 +32,7 @@ Status BuildTable(const std::string& dbname,
                   Iterator* iter,
                   FileMetaData* meta,
                   ///////////meggie
-                  META_Chunk* mchunk = nullptr
+                  META* nvmmeta = nullptr
                   ///////////meggie
                   );
 

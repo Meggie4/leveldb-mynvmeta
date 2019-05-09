@@ -142,8 +142,8 @@ Status Table::OpenByMeta(const Options& options,
     rep->file = file;
     rep->metaindex_handle = metaindex_handle;
     rep->index_block = index_block;
-    //rep->cache_id = (options.block_cache ? mchunk->get_index() : 0);
-    rep->cache_id = (options.block_cache ? options.block_cache->NewId() : 0);
+    rep->cache_id = (options.block_cache ? mchunk->get_index() : 0);
+    //rep->cache_id = (options.block_cache ? options.block_cache->NewId() : 0);
     rep->filter_data = nullptr; 
     rep->filter = new FilterBlockReader(rep->options.filter_policy, filter_data);
     *table = new Table(rep);

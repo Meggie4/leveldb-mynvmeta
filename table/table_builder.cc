@@ -254,6 +254,43 @@ Status TableBuilder::status() const {
   return rep_->status;
 }
 
+////////////meggie
+Status TableBuilder::Finish() {
+  Rep* r = rep_;
+  Flush();
+  assert(!r->closed);
+  r->closed = true;
+
+  // Write filter block
+  if (ok() && r->filter_block != nullptr) {
+    Slice filter_block_contents = r->filter_block->Finish();
+    if(mchunk_) {
+       size_t filter_len = WriteMetaBlock(filter_block_contents, kNoCompression, nullptr); 
+       DEBUG_T("filter_block len:%zu\n", filter_len);
+    }
+  }
+  // Write index block
+  if (ok()) {
+    if (r->pending_index_entry) {
+      r->options.comparator->FindShortSuccessor(&r->last_key);
+      std::string handle_encoding;
+      r->pending_handle.EncodeTo(&handle_encoding);
+      r->index_block.Add(r->last_key, Slice(handle_encoding));
+      r->pending_index_entry = false;
+    }
+    Slice index_block_contents = r->index_block.Finish();
+    if(mchunk_) {
+       size_t index_len = WriteMetaBlock(index_block_contents, kNoCompression, nullptr); 
+       DEBUG_T("index_block len:%zu\n", index_len);
+    }
+  }
+  
+  mchunk_->flush();
+  
+  return r->status;
+}
+////////////meggie
+/*
 Status TableBuilder::Finish() {
   Rep* r = rep_;
   Flush();
@@ -346,6 +383,7 @@ Status TableBuilder::Finish() {
   
   return r->status;
 }
+*/
 
 void TableBuilder::Abandon() {
   Rep* r = rep_;

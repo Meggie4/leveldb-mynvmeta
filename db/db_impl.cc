@@ -536,14 +536,8 @@ Status DBImpl::WriteLevel0Table(MemTable* mem, VersionEdit* edit,
   {
     mutex_.Unlock();
     ////////////////meggie
-    META_Chunk* mchunk = nullptr;
-    if(meta_){
-        meta_->reserve_and_alloc_chunk(meta.number, &mchunk);
-        //DEBUG_T("reserve_and_alloc_chunk, file number:%llu\n",
-          //      meta.number);
-    }
     s = BuildTable(dbname_, env_, options_, table_cache_, iter, &meta,
-            mchunk);
+            meta_);
     ////////////////meggie
     mutex_.Lock();
   }
@@ -901,26 +895,26 @@ Status DBImpl::FinishCompactionOutputFile(CompactionState* compact,
 
   if (s.ok() && current_entries > 0) {
     // Verify that the table is usable
-    Iterator* iter = table_cache_->NewIterator(ReadOptions(),
-                                               output_number,
-                                               current_bytes);
+    //Iterator* iter = table_cache_->NewIterator(ReadOptions(),
+    //                                         output_number,
+    //                                       current_bytes);
 
     ///////////////meggie
-   // Iterator* itermeta = table_cache_->NewIteratorByMeta(ReadOptions(),
-   //                                                     output_number,
-   //                                                     current_bytes,
-   //                                                     meta_);
+    Iterator* iter = table_cache_->NewIteratorByMeta(ReadOptions(),
+                                                        output_number,
+                                                        current_bytes,
+                                                        meta_);
 
-   // iter->SeekToFirst();
-   // itermeta->SeekToFirst();
-   // if(!itermeta->Valid()) {
-   //     DEBUG_T("itermeta is not valid, file number:%llu\n",
-   //             output_number);
-   // }
-   // for(; iter->Valid() && itermeta->Valid(); iter->Next(), itermeta->Next()) {
-   //     assert((iter->key() == itermeta->key()) 
-   //             && (iter->value() == itermeta->value()));
-   // }
+    /*iter->SeekToFirst();
+    itermeta->SeekToFirst();
+    if(!itermeta->Valid()) {
+        DEBUG_T("itermeta is not valid, file number:%llu\n",
+                output_number);
+    }
+    for(; iter->Valid() && itermeta->Valid(); iter->Next(), itermeta->Next()) {
+        assert((iter->key() == itermeta->key()) 
+                && (iter->value() == itermeta->value()));
+    }*/
     ///////////////meggie
     s = iter->status();
     delete iter;

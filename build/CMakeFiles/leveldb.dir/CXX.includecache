@@ -551,6 +551,8 @@ leveldb/env.h
 /home/meggie/文档/leveldb-mynvmeta/db/leveldb/env.h
 leveldb/iterator.h
 /home/meggie/文档/leveldb-mynvmeta/db/leveldb/iterator.h
+db/meta.h
+/home/meggie/文档/leveldb-mynvmeta/db/db/meta.h
 
 /home/meggie/文档/leveldb-mynvmeta/db/c.cc
 leveldb/c.h
