@@ -21,6 +21,14 @@
 //////////////meggie
 #include "db/meta.h"
 #include "util/debug.h"
+#include "util/timer.h"
+#ifdef TIMER_LOG
+	#define vvstart_timer(s) vset_->timer->StartTimer(s)
+	#define vvrecord_timer(s) vset_->timer->Record(s)
+#else
+	#define vvstart_timer(s)
+	#define vvrecord_timer(s)
+#endif
 //////////////meggie
 
 namespace leveldb {
@@ -461,7 +469,9 @@ Status Version::Get(const ReadOptions& options,
       saver.ucmp = ucmp;
       saver.user_key = user_key;
       saver.value = value;
+      vvstart_timer(TABLE_CACHE_GET);
       s = vset_->table_cache_->GetByMeta(options, f->number, f->file_size, meta_, ikey, &saver, SaveValue);
+      vvrecord_timer(TABLE_CACHE_GET);
       /////////////meggie
 
       if (!s.ok()) {
@@ -838,7 +848,10 @@ class VersionSet::Builder {
 VersionSet::VersionSet(const std::string& dbname,
                        const Options* options,
                        TableCache* table_cache,
-                       const InternalKeyComparator* cmp)
+                       const InternalKeyComparator* cmp,
+                       ////////////meggie
+                       Timer* timer)
+                       ////////////meggie
     : env_(options->env),
       dbname_(dbname),
       options_(options),
@@ -852,6 +865,9 @@ VersionSet::VersionSet(const std::string& dbname,
       descriptor_file_(nullptr),
       descriptor_log_(nullptr),
       dummy_versions_(this),
+      ///////////meggie
+      timer(timer),
+      ///////////meggie
       current_(nullptr) {
   /////////////meggie
   //AppendVersion(new Version(this));

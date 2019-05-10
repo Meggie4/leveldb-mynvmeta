@@ -73,6 +73,7 @@ CMakeFiles/leveldb.dir/db/db_impl.cc.o: ../util/debug.h
 CMakeFiles/leveldb.dir/db/db_impl.cc.o: ../util/logging.h
 CMakeFiles/leveldb.dir/db/db_impl.cc.o: ../util/mutexlock.h
 CMakeFiles/leveldb.dir/db/db_impl.cc.o: ../util/random.h
+CMakeFiles/leveldb.dir/db/db_impl.cc.o: ../util/timer.h
 CMakeFiles/leveldb.dir/db/db_impl.cc.o: ../include/leveldb/cache.h
 CMakeFiles/leveldb.dir/db/db_impl.cc.o: ../include/leveldb/comparator.h
 CMakeFiles/leveldb.dir/db/db_impl.cc.o: ../include/leveldb/db.h
@@ -359,6 +360,7 @@ CMakeFiles/leveldb.dir/db/version_set.cc.o: ../util/coding.h
 CMakeFiles/leveldb.dir/db/version_set.cc.o: ../util/debug.h
 CMakeFiles/leveldb.dir/db/version_set.cc.o: ../util/logging.h
 CMakeFiles/leveldb.dir/db/version_set.cc.o: ../util/random.h
+CMakeFiles/leveldb.dir/db/version_set.cc.o: ../util/timer.h
 CMakeFiles/leveldb.dir/db/version_set.cc.o: ../include/leveldb/cache.h
 CMakeFiles/leveldb.dir/db/version_set.cc.o: ../include/leveldb/comparator.h
 CMakeFiles/leveldb.dir/db/version_set.cc.o: ../include/leveldb/db.h

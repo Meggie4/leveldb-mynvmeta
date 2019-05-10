@@ -37,6 +37,7 @@ class VersionSet;
 class WritableFile;
 /////////////meggie
 class META;
+class Timer;
 /////////////meggie
 
 // Return the smallest index i such that files[i]->largest >= key.
@@ -184,7 +185,10 @@ class VersionSet {
   VersionSet(const std::string& dbname,
              const Options* options,
              TableCache* table_cache,
-             const InternalKeyComparator*);
+             const InternalKeyComparator*,
+             /////////////meggie
+             Timer* timer = nullptr);
+             /////////////meggie
   ~VersionSet();
 
   // Apply *edit to the current version to form a new descriptor that
@@ -337,6 +341,7 @@ class VersionSet {
 
   //////////////meggie
   META* meta_;
+  Timer* timer;
   //////////////meggie
   
   // Per-level key at which the next compaction at that level should start.

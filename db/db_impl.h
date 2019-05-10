@@ -15,6 +15,7 @@
 #include "port/port.h"
 #include "port/thread_annotations.h"
 
+
 namespace leveldb {
 
 class MemTable;
@@ -24,6 +25,7 @@ class VersionEdit;
 class VersionSet;
 //////////meggie
 class META;
+class Timer;
 //////////meggie
 
 class DBImpl : public DB {
@@ -137,6 +139,8 @@ class DBImpl : public DB {
   const std::string dbname_;
   /////////////meggie
   const std::string dbname_nvm_;
+  Timer* timer;
+  virtual void PrintTimerAudit();
   /////////////meggie
 
   // table_cache_ provides its own synchronization

@@ -38,7 +38,18 @@
 ///////////meggie
 #include "db/meta.h"
 #include "util/debug.h"
+#include "util/timer.h"
 ///////////meggie
+
+////////////meggie
+#ifdef TIMER_LOG
+	#define start_timer(s) timer->StartTimer(s)
+	#define record_timer(s) timer->Record(s)
+#else
+	#define start_timer(s)
+	#define record_timer(s)
+#endif
+////////////meggie
 
 namespace leveldb {
 
@@ -133,6 +144,15 @@ static int TableCacheSize(const Options& sanitized_options) {
   return sanitized_options.max_open_files - kNumNonTableCacheFiles;
 }
 
+//////////////////meggie
+void DBImpl::PrintTimerAudit(){
+    printf("--------timer information--------\n");
+    timer->DebugString();
+    printf("%s\n", timer->DebugString().c_str());
+    printf("-----end timer information-------\n");
+}
+//////////////////meggie
+
 DBImpl::DBImpl(const Options& raw_options, 
         const std::string& dbname,
         /////////meggie
@@ -166,11 +186,11 @@ DBImpl::DBImpl(const Options& raw_options,
       //////////meggie
       meta_(nullptr),
       dbname_nvm_(dbname_nvm),
-      //////////meggie
+      timer(new Timer()),
       versions_(new VersionSet(dbname_, &options_, table_cache_,
-                               &internal_comparator_)) {
+                               &internal_comparator_, timer)) {
+      //////////meggie
   has_imm_.Release_Store(nullptr);
-  
 }
 
 DBImpl::~DBImpl() {
@@ -195,6 +215,7 @@ DBImpl::~DBImpl() {
   delete table_cache_;
   ///////////meggie
   delete meta_;
+  delete timer;
   ///////////meggie
 
   if (owns_info_log_) {

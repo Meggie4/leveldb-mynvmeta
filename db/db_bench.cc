@@ -699,6 +699,9 @@ class Benchmark {
             DEBUG_T(" %zu", *iter);
         DEBUG_T("\n");*/
       }
+      ////////////meggie
+      db_->PrintTimerAudit();
+      ////////////meggie
     }
   }
 
