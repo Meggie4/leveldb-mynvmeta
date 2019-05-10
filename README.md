@@ -1,2 +1,2 @@
-leveldb-master-ssd
+leveldb-mynvmeta
 

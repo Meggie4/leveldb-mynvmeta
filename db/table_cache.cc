@@ -12,6 +12,9 @@
 ///////////meggie
 #include "db/meta.h"
 #include "util/debug.h"
+
+int table_find_counts = 0;
+int table_not_find_counts = 0;
 ///////////meggie
 
 namespace leveldb {
@@ -130,10 +133,63 @@ void TableCache::Evict(uint64_t file_number) {
 }
 
 /////////////////meggie 
-static void DeleteTable(void* arg1, void* arg2) {
-  Table* table = reinterpret_cast<Table*>(arg1);
-  delete table;
+void TableCache::EvictByMeta(META* meta, uint64_t file_number) {
+  char buf[sizeof(file_number)];
+  EncodeFixed64(buf, file_number);
+  cache_->Erase(Slice(buf, sizeof(buf)));
+  meta->evict_chunk(file_number);
 }
+
+Status TableCache::FindTableByMeta(uint64_t file_number, 
+                                   uint64_t file_size,
+                                   META* meta, 
+                                   Cache::Handle** handle) {
+    Status s;
+    char buf[sizeof(file_number)];
+    EncodeFixed64(buf, file_number);
+    Slice key(buf, sizeof(buf));
+    *handle = cache_->Lookup(key);
+    if (*handle == nullptr) {
+        //////////meggie
+        table_not_find_counts++;
+        //////////meggie
+        std::string fname  = TableFileName(dbname_, file_number);
+        RandomAccessFile* file = nullptr;
+        Table* table = nullptr;
+        Status s;
+        s = env_->NewRandomAccessFile(fname, &file);
+        
+        if (!s.ok()) {
+          std::string old_fname = SSTTableFileName(dbname_, file_number);
+          if (env_->NewRandomAccessFile(old_fname, &file).ok()) {
+            s = Status::OK();
+          }
+        }
+
+        if (s.ok()) {
+          //DEBUG_T("GetByMeta, to alloc_chunk, file_number:%llu\n", file_number);
+          META_Chunk* mchunk = meta->alloc_chunk(file_number);
+          s = Table::OpenByMeta(options_, file, file_number, 
+                                file_size, mchunk, &table);
+        }
+
+        if(!s.ok()) {
+            assert(table == nullptr);
+            delete file;
+        } else {
+            TableAndFile* tf = new TableAndFile;
+            tf->file = file;
+            tf->table = table;
+            *handle = cache_->Insert(key, tf, 1, &DeleteEntry);
+        }
+    } else {
+        //////////meggie
+        table_find_counts++;
+        //////////meggie
+    }
+    return s;
+}
+
 
 Status TableCache::GetByMeta(const ReadOptions& options, 
                     uint64_t file_number,
@@ -142,30 +198,13 @@ Status TableCache::GetByMeta(const ReadOptions& options,
                     const Slice& k,
                     void* arg,
                     void (*saver)(void*, const Slice&, const Slice&)) {
-    std::string fname  = TableFileName(dbname_, file_number);
-    RandomAccessFile* file = nullptr;
-    Table* table = nullptr;
-    Status s;
-    s = env_->NewRandomAccessFile(fname, &file);
+    Cache::Handle* handle = nullptr;
+    Status s = FindTableByMeta(file_number, file_size, meta, &handle);
     
-    if (!s.ok()) {
-      std::string old_fname = SSTTableFileName(dbname_, file_number);
-      if (env_->NewRandomAccessFile(old_fname, &file).ok()) {
-        s = Status::OK();
-      }
-    }
-
-    if (s.ok()) {
-      //DEBUG_T("GetByMeta, to alloc_chunk, file_number:%llu\n", file_number);
-      META_Chunk* mchunk = meta->alloc_chunk(file_number);
-      s = Table::OpenByMeta(options_, file, file_number, 
-                            file_size, mchunk, &table);
-    }
-
-    //DEBUG_T("GetByMeta, has success alloc_chunk, file_number:%llu\n", file_number);
     if(s.ok()) {
-        s = table->InternalGet(options, k, arg, saver);
-        delete table;
+        Table* t = reinterpret_cast<TableAndFile*>(cache_->Value(handle))->table;
+        s = t->InternalGet(options, k, arg, saver);
+        cache_->Release(handle);
     }
     
     return s;
@@ -179,34 +218,22 @@ Iterator* TableCache::NewIteratorByMeta(const ReadOptions& options,
     if(tableptr != nullptr) {
         *tableptr = nullptr;
     }
-    Status s;
-    std::string fname  = TableFileName(dbname_, file_number);
-    RandomAccessFile* file = nullptr;
-    Table* table = nullptr;
-    s = env_->NewRandomAccessFile(fname, &file);
     
-    if (!s.ok()) {
-      std::string old_fname = SSTTableFileName(dbname_, file_number);
-      if (env_->NewRandomAccessFile(old_fname, &file).ok()) {
-        s = Status::OK();
-      }
-    }
+    Cache::Handle* handle = nullptr;
 
-    if (s.ok()) {
-      META_Chunk* mchunk = meta->alloc_chunk(file_number);
-      s = Table::OpenByMeta(options_, file, file_number, 
-                            file_size, mchunk, &table);
-    }
+    Status s = FindTableByMeta(file_number, file_size, meta, &handle);
 
     if(!s.ok()) {
         return NewErrorIterator(s);
     }
 
+    Table* table = reinterpret_cast<TableAndFile*>(cache_->Value(handle))->table;
     Iterator* result = table->NewIterator(options);
-    result->RegisterCleanup(&DeleteTable, table, nullptr);
+    result->RegisterCleanup(&UnrefEntry, cache_, handle);
 
-    if(tableptr != nullptr)
+    if(tableptr != nullptr) {
         *tableptr = table;
+    }
     
     return result;
 }

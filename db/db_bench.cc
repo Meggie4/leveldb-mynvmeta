@@ -9,6 +9,7 @@
 #include <fstream>
 #include "leveldb/table_builder.h"
 #include "util/debug.h"
+#include "db/table_cache.h"
 //////////meggie
 #include "leveldb/cache.h"
 #include "leveldb/db.h"
@@ -66,7 +67,7 @@ static const char* FLAGS_benchmarks =
     ;*/
 
 // Number of key/values to place in database
-static int FLAGS_num = 1000000;
+static int FLAGS_num = 10000000;
 
 // Number of read operations to do.  If negative, do FLAGS_num reads.
 static int FLAGS_reads = -1;
@@ -698,10 +699,12 @@ class Benchmark {
         for(auto iter = meta_lens.begin(); iter != meta_lens.end(); iter++)
             DEBUG_T(" %zu", *iter);
         DEBUG_T("\n");*/
+        ////////////meggie
+        db_->PrintTimerAudit();
+        fprintf(stderr, "table_find_counts:%d, table_not_find_counts:%d\n",
+                table_find_counts, table_not_find_counts);
+        ////////////meggie
       }
-      ////////////meggie
-      db_->PrintTimerAudit();
-      ////////////meggie
     }
   }
 

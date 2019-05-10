@@ -14,6 +14,11 @@
 #include "leveldb/table.h"
 #include "port/port.h"
 
+///////////meggie
+extern int table_find_counts;
+extern int table_not_find_counts;
+///////////meggie
+
 namespace leveldb {
 
 class Env;
@@ -51,6 +56,7 @@ class TableCache {
   void Evict(uint64_t file_number);
 
   /////////////////meggie
+  void EvictByMeta(META* meta, uint64_t file_number);
   Status GetByMeta(const ReadOptions& options, 
                     uint64_t file_number,
                     uint64_t file_size,
@@ -72,6 +78,12 @@ class TableCache {
   Cache* cache_;
 
   Status FindTable(uint64_t file_number, uint64_t file_size, Cache::Handle**);
+  ////////////meggie
+  Status FindTableByMeta(uint64_t file_number, 
+                                   uint64_t file_size,
+                                   META* meta, 
+                                   Cache::Handle** handle);
+  ////////////meggie
 };
 
 }  // namespace leveldb

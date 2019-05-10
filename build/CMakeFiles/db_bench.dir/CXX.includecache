@@ -6,6 +6,38 @@
 
 #IncludeRegexTransform: 
 
+..//db/dbformat.h
+stdio.h
+-
+leveldb/comparator.h
+../db/leveldb/comparator.h
+leveldb/db.h
+../db/leveldb/db.h
+leveldb/filter_policy.h
+../db/leveldb/filter_policy.h
+leveldb/slice.h
+../db/leveldb/slice.h
+leveldb/table_builder.h
+../db/leveldb/table_builder.h
+util/coding.h
+../db/util/coding.h
+util/logging.h
+../db/util/logging.h
+
+..//db/table_cache.h
+string
+-
+stdint.h
+-
+db/dbformat.h
+../db/db/dbformat.h
+leveldb/cache.h
+../db/leveldb/cache.h
+leveldb/table.h
+../db/leveldb/table.h
+port/port.h
+../db/port/port.h
+
 ..//port/atomic_pointer.h
 stdint.h
 -
@@ -50,6 +82,18 @@ port/thread_annotations.h
 
 ..//port/thread_annotations.h
 
+..//util/coding.h
+stdint.h
+-
+string.h
+-
+string
+-
+leveldb/slice.h
+../util/leveldb/slice.h
+port/port.h
+../util/port/port.h
+
 ..//util/crc32c.h
 stddef.h
 -
@@ -61,6 +105,16 @@ stdint.h
 ..//util/histogram.h
 string
 -
+
+..//util/logging.h
+stdio.h
+-
+stdint.h
+-
+string
+-
+port/port.h
+../util/port/port.h
 
 ..//util/mutexlock.h
 port/port.h
@@ -97,6 +151,12 @@ leveldb/export.h
 ../include/leveldb/leveldb/export.h
 leveldb/slice.h
 ../include/leveldb/leveldb/slice.h
+
+../include/leveldb/comparator.h
+string
+-
+leveldb/export.h
+../include/leveldb/leveldb/export.h
 
 ../include/leveldb/db.h
 stdint.h
@@ -168,6 +228,14 @@ leveldb/export.h
 leveldb/slice.h
 ../include/leveldb/leveldb/slice.h
 
+../include/leveldb/table.h
+stdint.h
+-
+leveldb/export.h
+../include/leveldb/leveldb/export.h
+leveldb/iterator.h
+../include/leveldb/leveldb/iterator.h
+
 ../include/leveldb/table_builder.h
 stdint.h
 -
@@ -201,6 +269,8 @@ leveldb/table_builder.h
 /home/meggie/文档/leveldb-mynvmeta/db/leveldb/table_builder.h
 util/debug.h
 /home/meggie/文档/leveldb-mynvmeta/db/util/debug.h
+db/table_cache.h
+/home/meggie/文档/leveldb-mynvmeta/db/db/table_cache.h
 leveldb/cache.h
 /home/meggie/文档/leveldb-mynvmeta/db/leveldb/cache.h
 leveldb/db.h

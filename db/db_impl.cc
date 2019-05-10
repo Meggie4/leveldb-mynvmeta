@@ -316,7 +316,7 @@ void DBImpl::DeleteObsoleteFiles() {
         if (type == kTableFile) {
           /////////meggie
           //table_cache_->Evict(number);
-          meta_->evict_chunk(number);
+          table_cache_->EvictByMeta(meta_, number);
           /////////meggie
         }
         Log(options_.info_log, "Delete type=%d #%lld\n",
