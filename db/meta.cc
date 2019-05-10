@@ -20,9 +20,11 @@ namespace leveldb{
       length_ptr_(nullptr),
       read_ptr_(addr_),
       size_(0) {
-          length_ptr_ = addr_ + 16;
+          //length_ptr_ = addr_ + 16;
+          //current_ptr_ = length_ptr_ + 8;
+          length_ptr_ = addr_;
           current_ptr_ = length_ptr_ + 8;
-          size_ = 24;
+          size_ = 8;
     }
    
     uint64_t META_Chunk::append(const void* ptr, uint64_t size) {
@@ -87,7 +89,7 @@ namespace leveldb{
         config.order = 7;
         config.entries = 10;
         index_tree_ = bplus_tree_init(config.order, 
-                config.entries);
+              config.entries);
         if(index_tree_ == nullptr) {
             perror("index bplus tree create failed\n");
             exit(9);
@@ -190,7 +192,6 @@ namespace leveldb{
                 char* phy_addr = mmap_start_ + chunk_offset_ + tmp * CHUNK_SIZE; 
                 *mchunk = new META_Chunk(number, tmp, phy_addr);
                 update_chunk_index(number, tmp);
-                uint64_t tree_index = get_chunk_index(number);
                 //DEBUG_T("success to get META_Chunk, number:%llu, tmp:%llu, tree_index:%llu\n", number, tmp, tree_index);
 
                 return true;
@@ -211,6 +212,7 @@ namespace leveldb{
 
     META_Chunk* META::alloc_chunk(uint64_t number) {
         uint64_t chunk_index = get_chunk_index(number);
+        //uint64_t chunk_index = number;
         assert(OnlineMap_[chunk_index] == 1);
         
         char* phy_addr = mmap_start_ + chunk_offset_ + chunk_index * CHUNK_SIZE; 
@@ -219,6 +221,7 @@ namespace leveldb{
 
     void META::evict_chunk(uint64_t number) {
         uint64_t chunk_index = get_chunk_index(number);
+        //uint64_t chunk_index = number;
         OnlineMap_[chunk_index] = 0;
         update_chunk_index(number, -1);
     }

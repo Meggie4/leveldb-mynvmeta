@@ -1031,6 +1031,8 @@ util/debug.h
 /home/meggie/文档/leveldb-mynvmeta/table/util/debug.h
 db/meta.h
 /home/meggie/文档/leveldb-mynvmeta/table/db/meta.h
+leveldb/table.h
+/home/meggie/文档/leveldb-mynvmeta/table/leveldb/table.h
 
 /home/meggie/文档/leveldb-mynvmeta/table/two_level_iterator.cc
 table/two_level_iterator.h

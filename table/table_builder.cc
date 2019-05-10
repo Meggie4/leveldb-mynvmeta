@@ -17,12 +17,37 @@
 ///////////////meggie
 #include "util/debug.h"
 #include "db/meta.h"
+#include "leveldb/table.h"
 
 std::set<size_t> filter_lens;
 std::set<size_t> index_lens;
 std::set<size_t> meta_lens;
 ///////////////meggie
 namespace leveldb {
+
+/////////////meggie
+struct TableBuilder::ChunkTable {
+  intptr_t filter_data_offset;
+  intptr_t index_data_offset;
+  uint64_t file_number;
+
+  char* GetFilterdata() {
+      return reinterpret_cast<char*>((intptr_t)this + filter_data_offset);
+  }
+
+  char* GetIndexdata() {
+      return reinterpret_cast<char*>((intptr_t)this + index_data_offset);
+  }
+  
+  ChunkTable(char* filter_data, 
+             char* index_data,
+             uint64_t file_number):
+      file_number(file_number) {
+    filter_data_offset = (intptr_t)filter_data - (intptr_t)this;    
+    index_data_offset = (intptr_t)index_data - (intptr_t)this;
+  }
+};
+/////////////meggie
 
 struct TableBuilder::Rep {
   Options options;
@@ -227,15 +252,7 @@ size_t TableBuilder::WriteMetaBlock(const Slice& block_contents,
         handle->set_size(block_contents.size());
     }
     chunk_offset_ = mchunk_->append(block_contents.data(), block_contents.size());
-    /*char trailer[kBlockTrailerSize];
-    trailer[0] = type;
-    uint32_t crc = crc32c::Value(block_contents.data(), block_contents.size());
-    crc = crc32c::Extend(crc, trailer, 1);  // Extend crc to cover block type
-    EncodeFixed32(trailer+1, crc32c::Mask(crc));
-    chunk_offset_ = mchunk_->append(trailer, kBlockTrailerSize);
-    mchunk_->set_length(block_contents.size() + kBlockTrailerSize);*/
     mchunk_->set_length(block_contents.size());
-    //DEBUG_T("chunk_offset_:%llu\n", chunk_offset_);
     return block_contents.size();
 }
 
@@ -255,18 +272,32 @@ Status TableBuilder::status() const {
 }
 
 ////////////meggie
-Status TableBuilder::Finish() {
+/*
+Status TableBuilder::Finish() { 
   Rep* r = rep_;
   Flush();
   assert(!r->closed);
   r->closed = true;
+  size_t 
 
+}*/
+
+Status TableBuilder::Finish() {
+  uint64_t start_micros = Env::Default()->NowMicros(); 
+  Rep* r = rep_;
+  Flush();
+  assert(!r->closed);
+  r->closed = true;
+  uint64_t end_micros = Env::Default()->NowMicros(); 
+  DEBUG_T("flush need %llu micros\n", end_micros - start_micros);
+
+  uint64_t start_micros1 = Env::Default()->NowMicros(); 
   // Write filter block
   if (ok() && r->filter_block != nullptr) {
     Slice filter_block_contents = r->filter_block->Finish();
     if(mchunk_) {
        size_t filter_len = WriteMetaBlock(filter_block_contents, kNoCompression, nullptr); 
-       DEBUG_T("filter_block len:%zu\n", filter_len);
+       //DEBUG_T("filter_block len:%zu\n", filter_len);
     }
   }
   // Write index block
@@ -281,15 +312,16 @@ Status TableBuilder::Finish() {
     Slice index_block_contents = r->index_block.Finish();
     if(mchunk_) {
        size_t index_len = WriteMetaBlock(index_block_contents, kNoCompression, nullptr); 
-       DEBUG_T("index_block len:%zu\n", index_len);
+       //DEBUG_T("index_block len:%zu\n", index_len);
     }
   }
   
-  mchunk_->flush();
+  //mchunk_->flush();
+  uint64_t end_micros1 = Env::Default()->NowMicros(); 
+  DEBUG_T("meta write need %llu micros\n", end_micros1 - start_micros1);
   
   return r->status;
 }
-////////////meggie
 /*
 Status TableBuilder::Finish() {
   Rep* r = rep_;

@@ -153,24 +153,24 @@ Status TableCache::FindTableByMeta(uint64_t file_number,
         //////////meggie
         table_not_find_counts++;
         //////////meggie
+
+        uint64_t start_micros1 = Env::Default()->NowMicros(); 
         std::string fname  = TableFileName(dbname_, file_number);
         RandomAccessFile* file = nullptr;
         Table* table = nullptr;
         Status s;
         s = env_->NewRandomAccessFile(fname, &file);
-        
-        if (!s.ok()) {
-          std::string old_fname = SSTTableFileName(dbname_, file_number);
-          if (env_->NewRandomAccessFile(old_fname, &file).ok()) {
-            s = Status::OK();
-          }
-        }
+        uint64_t end_micros1 = Env::Default()->NowMicros(); 
+        //DEBUG_T("new tablefile need %llu micros\n", end_micros1 - start_micros1);
 
         if (s.ok()) {
           //DEBUG_T("GetByMeta, to alloc_chunk, file_number:%llu\n", file_number);
+          uint64_t start_micros = Env::Default()->NowMicros(); 
           META_Chunk* mchunk = meta->alloc_chunk(file_number);
           s = Table::OpenByMeta(options_, file, file_number, 
                                 file_size, mchunk, &table);
+          uint64_t end_micros = Env::Default()->NowMicros();
+          //DEBUG_T("OpenByMeta need %llu micros\n", end_micros - start_micros);
         }
 
         if(!s.ok()) {

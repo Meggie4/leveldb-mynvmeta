@@ -104,7 +104,7 @@ Status Table::OpenByMeta(const Options& options,
     }
         
     Status s;
-    uint64_t magic_number = mchunk->get_number();
+    /*uint64_t magic_number = mchunk->get_number();
     if(magic_number != kTableMagicNumber){
        DEBUG_T("not a sstable meta (bad magic_number),magic_number:%#X\n", magic_number);
        return Status::Corruption("not a sstable meta (bad magic number)");
@@ -114,7 +114,7 @@ Status Table::OpenByMeta(const Options& options,
     if(mfile_number != file_number) {
        DEBUG_T("not the sstable number we search\n");
        return Status::Corruption("not the sstable number we search");
-    }
+    }*/
     
     ///////filter block 
     uint64_t filter_block_len = mchunk->get_number();

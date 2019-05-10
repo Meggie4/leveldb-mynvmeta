@@ -104,6 +104,9 @@ class LEVELDB_EXPORT TableBuilder {
   size_t meta_bytes;
   META_Chunk* mchunk_; 
   uint64_t chunk_offset_;
+  
+  struct ChunkTable;
+  ChunkTable* cktbl_;
   //////////////meggie
 
   struct Rep;

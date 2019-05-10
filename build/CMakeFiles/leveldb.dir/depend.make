@@ -538,9 +538,11 @@ CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../include/leveldb/comparator.h
 CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../include/leveldb/env.h
 CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../include/leveldb/export.h
 CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../include/leveldb/filter_policy.h
+CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../include/leveldb/iterator.h
 CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../include/leveldb/options.h
 CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../include/leveldb/slice.h
 CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../include/leveldb/status.h
+CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../include/leveldb/table.h
 CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../include/leveldb/table_builder.h
 CMakeFiles/leveldb.dir/table/table_builder.cc.o: ../table/table_builder.cc
 CMakeFiles/leveldb.dir/table/table_builder.cc.o: include/port/port_config.h

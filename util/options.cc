@@ -22,7 +22,7 @@ Options::Options()
       block_restart_interval(16),
       /////////////meggie
       //max_open_files(1000),
-      max_open_files(1000),
+      max_open_files(100),
       max_file_size(4<<20),
       //compression(kSnappyCompression),
       compression(kNoCompression),
