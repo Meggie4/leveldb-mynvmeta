@@ -220,5 +220,6 @@ namespace leveldb{
     void META::evict_chunk(uint64_t number) {
         uint64_t chunk_index = get_chunk_index(number);
         OnlineMap_[chunk_index] = 0;
+        update_chunk_index(number, -1);
     }
 }
