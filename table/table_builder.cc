@@ -244,18 +244,16 @@ size_t TableBuilder::WriteRawBlock(const Slice& block_contents,
 }
 
 ///////////////////meggie
-size_t TableBuilder::WriteMetaBlock(const Slice& block_contents,
-        CompressionType type) {
+size_t TableBuilder::WriteMetaBlock(const Slice& block_contents) {
     chunk_offset_ = mchunk_->append(block_contents.data(), block_contents.size());
     mchunk_->set_length(block_contents.size());
     return block_contents.size();
 }
 
-size_t TableBuilder::WriteMetaBlock(BlockBuilder* block, 
-        BlockHandle* handle) {
+size_t TableBuilder::WriteMetaBlock(BlockBuilder* block) {
   assert(ok());
   Slice block_contents = block->Finish();
-  size_t blocksize = WriteMetaBlock(block_contents, kNoCompression, handle);
+  size_t blocksize = WriteMetaBlock(block_contents);
   block->Reset();
   return blocksize;
 }
@@ -291,7 +289,7 @@ Status TableBuilder::Finish() {
   if (ok() && r->filter_block != nullptr) {
     Slice filter_block_contents = r->filter_block->Finish();
     if(mchunk_) {
-       size_t filter_len = WriteMetaBlock(filter_block_contents, kNoCompression); 
+       size_t filter_len = WriteMetaBlock(filter_block_contents); 
        //DEBUG_T("filter_block len:%zu\n", filter_len);
     }
   }
@@ -306,7 +304,7 @@ Status TableBuilder::Finish() {
     }
     Slice index_block_contents = r->index_block.Finish();
     if(mchunk_) {
-       size_t index_len = WriteMetaBlock(index_block_contents, kNoCompression); 
+       size_t index_len = WriteMetaBlock(index_block_contents); 
        //DEBUG_T("index_block len:%zu\n", index_len);
     }
   }

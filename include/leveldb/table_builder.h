@@ -99,8 +99,8 @@ class LEVELDB_EXPORT TableBuilder {
   //void WriteRawBlock(const Slice& data, CompressionType, BlockHandle* handle);
   size_t WriteBlock(BlockBuilder* block, BlockHandle* handle);
   size_t WriteRawBlock(const Slice& data, CompressionType, BlockHandle* handle);
-  size_t WriteMetaBlock(const Slice& block_contents, CompressionType type, BlockHandle* handle);
-  size_t WriteMetaBlock(BlockBuilder* block, BlockHandle* handle);
+  size_t WriteMetaBlock(const Slice& block_contents);
+  size_t WriteMetaBlock(BlockBuilder* block);
   size_t meta_bytes;
   META_Chunk* mchunk_; 
   uint64_t chunk_offset_;

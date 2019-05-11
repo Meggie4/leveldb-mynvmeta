@@ -43,8 +43,8 @@ NUMTHREAD=1
 #BENCHMARKS="customedworkloadzip080_4kwritelarge"
 #BENCHMARKS="customedworkloaduniform_4kwritelarge"
 
-#BENCHMARKS="fillrandom,readrandom"
-BENCHMARKS="fillrandom"
+BENCHMARKS="fillrandom,readrandom"
+#BENCHMARKS="fillrandom"
 
 #NoveLSM specific parameters
 #NoveLSM uses memtable levels, always set to num_levels 2
